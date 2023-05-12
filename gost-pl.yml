@@ -1,0 +1,27 @@
+services:
+  - name: service-poland
+    addr: :2243
+    handler:
+      type: relay
+    listener:
+      type: ssh
+    forwarder:
+      nodes:
+        - name: target-v2ray
+          addr: :443
+  - name: service-v2rayvmess
+    addr: :4443
+    handler:
+      type: relay
+    listener:
+      type: tls
+    forwarder:
+      nodes:
+        - name: target-v2rayvmess
+          addr: :3443
+
+
+tls:
+  certFile: "/etc/letsencrypt/live/admin.somimobile.com/cert.pem"
+  keyFile: "/etc/letsencrypt/live/admin.somimobile.com/privkey.pem"
+  caFile: "/etc/letsencrypt/live/admin.somimobile.com/fullchain.pem"

@@ -1,0 +1,18 @@
+services:
+  - name: service-0
+    addr: :1443
+    handler:
+      type: relay
+    listener:
+      type: ssh
+    forwarder:
+      nodes:
+        - name: target-v2ray
+          addr: :443
+
+
+tls:
+  certFile: "/etc/letsencrypt/qa.somimobile.com/somimobile.com.cer"
+  keyFile: "/etc/letsencrypt/qa.somimobile.com/somimobile.com.key"
+  caFile: "/etc/letsencrypt/qa.somimobile.com/fullchain.cer"
+

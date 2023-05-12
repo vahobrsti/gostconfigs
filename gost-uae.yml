@@ -1,0 +1,11 @@
+services:
+  - name: service-bahrain
+    addr: :2222
+    handler:
+      type: relay
+    listener:
+      type: ssh
+    forwarder:
+      nodes:
+        - name: target-v2ray
+          addr: :443

@@ -1,0 +1,61 @@
+services:
+  - name: service-france
+    addr: :7443
+    handler:
+      type: tcp
+      chain: chain-france
+    listener:
+      type: tcp
+    forwarder:
+      nodes:
+        - name: target-local-trojan
+          addr: 127.0.0.2:443
+  - name: service-poland-trojan
+    addr: :8443
+    handler:
+      type: tcp
+      chain: chain-poland
+    listener:
+      type: tcp
+    forwarder:
+      nodes:
+        - name: target-local-trojan
+          addr: 127.0.0.1:443
+  - name: service-bahrain
+    addr: :6443
+    handler:
+      type: tcp
+      chain: chain-bahrain
+    listener:
+      type: tcp
+chains:
+  - name: chain-france
+    hops:
+      - name: hop-0
+        nodes:
+          - name: node-0
+            addr: qa.somimobile.com:2222
+            connector:
+              type: relay
+            dialer:
+              type: ssh
+  - name: chain-poland
+    hops:
+      - name: hop-0
+        nodes:
+          - name: node-0
+            addr: admin.somimobile.com:3243
+            connector:
+              type: relay
+            dialer:
+              type: ssh
+  - name: chain-bahrain
+    hops:
+      - name: hop-bahrain
+        nodes:
+          - name: node-bahrain
+            addr: foroush.somimobile.com:443
+            connector:
+              type: forward
+            handler:
+              type: tun
