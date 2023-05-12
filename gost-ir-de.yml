@@ -21,7 +21,7 @@ chains:
             connector:
               type: relay
             dialer:
-              type: tls
+              type: mtls
               tls:
                 secure: true
 

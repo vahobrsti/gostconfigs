@@ -4,7 +4,7 @@ services:
     handler:
       type: relay
     listener:
-      type: tls
+      type: mtls
     forwarder:
       nodes:
         - name: target-v2ray
