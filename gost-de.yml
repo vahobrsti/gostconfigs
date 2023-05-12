@@ -1,0 +1,17 @@
+services:
+  - name: service-de
+    addr: :2222
+    handler:
+      type: relay
+    listener:
+      type: tls
+    forwarder:
+      nodes:
+        - name: target-v2ray
+          addr: :443
+
+
+tls:
+  certFile: "/etc/letsencrypt/live/benz.somimobile.com/cert.pem"
+  keyFile: "/etc/letsencrypt/live/benz.somimobile.com/privkey.pem"
+  caFile: "/etc/letsencrypt/live/benz.somimobile.com/fullchain.pem"
