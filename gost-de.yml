@@ -2,9 +2,9 @@ services:
   - name: service-de
     addr: :2222
     handler:
-      type: relay
+      type: forward
     listener:
-      type: mtls
+      type: mwss
     forwarder:
       nodes:
         - name: target-v2ray

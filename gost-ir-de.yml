@@ -19,9 +19,9 @@ chains:
           - name: node-0
             addr: benz.somimobile.com:2222
             connector:
-              type: relay
-            dialer:
-              type: mtls
+              type: forward
+            handler:
+              type: mwss
               tls:
                 secure: true
 
