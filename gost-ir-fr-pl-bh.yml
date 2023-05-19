@@ -34,7 +34,7 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: qa.somimobile.com:2222
+            addr: qa.somimobile.com:3222
             connector:
               type: relay
             dialer:

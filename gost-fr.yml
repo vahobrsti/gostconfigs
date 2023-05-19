@@ -1,6 +1,6 @@
 services:
   - name: service-0
-    addr: :1443
+    addr: :3222
     handler:
       type: relay
     listener:
