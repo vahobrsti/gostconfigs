@@ -17,9 +17,11 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: 3.29.99.192:2222
+            addr: basij.somimobile.com:2822
             connector:
               type: relay
             dialer:
               type: tls
+              tls:
+                secure: true
 
