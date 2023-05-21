@@ -9,7 +9,7 @@ services:
     forwarder:
       nodes:
         - name: target-local-trojan
-          addr: 127.0.0.2:443
+          addr: 127.0.0.2:8443
   - name: service-poland-trojan
     addr: :8443
     handler:
