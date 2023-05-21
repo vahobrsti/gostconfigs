@@ -8,16 +8,6 @@ services:
     forwarder:
       nodes:
         - name: target-v2ray
-          addr: :443
-  - name: service-v2rayvmess
-    addr: :4443
-    handler:
-      type: relay
-    listener:
-      type: tls
-    forwarder:
-      nodes:
-        - name: target-v2rayvmess
           addr: :3443
 
 

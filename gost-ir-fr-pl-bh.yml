@@ -20,7 +20,7 @@ services:
     forwarder:
       nodes:
         - name: target-local-trojan
-          addr: 127.0.0.1:443
+          addr: 127.0.0.1:3443
   - name: service-bahrain
     addr: :6443
     handler:
