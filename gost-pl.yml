@@ -1,6 +1,6 @@
 services:
   - name: service-poland
-    addr: :2232
+    addr: :3232
     handler:
       type: relay
     listener:
