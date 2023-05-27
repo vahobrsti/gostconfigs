@@ -34,7 +34,7 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: uat.somimobile.com:3222
+            addr: uat.somimobile.com:3233
             connector:
               type: relay
             dialer:
@@ -44,7 +44,7 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: admin.somimobile.com:3232
+            addr: admin.somimobile.com:3233
             connector:
               type: relay
             dialer:
