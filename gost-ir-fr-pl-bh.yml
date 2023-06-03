@@ -34,11 +34,9 @@ chains:
             connector:
               type: relay
             dialer:
-              type: mwss
+              type: tls
               tls:
                 secure: true
-                certFile: "/etc/letsencrypt/exchange.somimobile.com/fullchain.cer"
-                keyFile: "/etc/letsencrypt/exchange.somimobile.com/somimobile.com.key"
 
   - name: chain-poland
     hops:

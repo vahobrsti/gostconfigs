@@ -4,7 +4,7 @@ services:
     handler:
       type: relay
     listener:
-      type: mwss
+      type: tls
     forwarder:
       nodes:
         - name: target-v2ray
@@ -14,4 +14,3 @@ services:
 tls:
   certFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.cer"
   keyFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.key"
-  caFile: "/etc/letsencrypt/uat.somimobile.com/fullchain.cer"
