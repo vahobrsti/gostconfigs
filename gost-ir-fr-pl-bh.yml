@@ -6,10 +6,6 @@ services:
       chain: chain-france
     listener:
       type: tcp
-    forwarder:
-      nodes:
-        - name: target-local-trojan
-          addr: 127.0.0.2:8443
   - name: service-poland-trojan
     addr: :8443
     handler:
@@ -34,11 +30,16 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: uat.somimobile.com:3233
+            addr: uat.somimobile.com:9443
             connector:
               type: relay
             dialer:
-              type: ssh
+              type: mwss
+              tls:
+                secure: true
+                certFile: "/etc/letsencrypt/exchange.somimobile.com/fullchain.cer"
+                keyFile: "/etc/letsencrypt/exchange.somimobile.com/somimobile.com.key"
+
   - name: chain-poland
     hops:
       - name: hop-0
@@ -49,6 +50,7 @@ chains:
               type: relay
             dialer:
               type: ssh
+
   - name: chain-bahrain
     hops:
       - name: hop-bahrain

@@ -1,10 +1,10 @@
 services:
   - name: service-0
-    addr: :3233
+    addr: :9443
     handler:
       type: relay
     listener:
-      type: ssh
+      type: mwss
     forwarder:
       nodes:
         - name: target-v2ray
@@ -12,7 +12,6 @@ services:
 
 
 tls:
-  certFile: "/etc/letsencrypt/qa.somimobile.com/somimobile.com.cer"
-  keyFile: "/etc/letsencrypt/qa.somimobile.com/somimobile.com.key"
-  caFile: "/etc/letsencrypt/qa.somimobile.com/fullchain.cer"
-
+  certFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.cer"
+  keyFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.key"
+  caFile: "/etc/letsencrypt/uat.somimobile.com/fullchain.cer"
