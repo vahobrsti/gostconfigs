@@ -1,5 +1,6 @@
 #!/bin/bash
 
+iptables -F
 # Print the iptables rule to allow established and related TCP connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
