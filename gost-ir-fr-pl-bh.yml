@@ -54,7 +54,7 @@ chains:
       - name: hop-bahrain
         nodes:
           - name: node-bahrain
-            addr: foroush.somimobile.com:443
+            addr: foroush.somimobile.com:6443
             connector:
               type: forward
             handler:
