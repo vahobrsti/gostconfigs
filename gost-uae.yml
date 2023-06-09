@@ -11,6 +11,5 @@ services:
           addr: :443
 
 tls:
-  certFile: "/etc/letsencrypt/live/basij.somimobile.com/cert.pem"
-  keyFile: "/etc/letsencrypt/live/basij.somimobile.com/privkey.pem"
-  caFile: "/etc/letsencrypt/live/basij.somimobile.com/fullchain.pem"
+  certFile: "/etc/letsencrypt/basij.somimobile.com/fullchain.cer"
+  keyFile: "/etc/letsencrypt/basij.somimobile.com/somimobile.com.key"

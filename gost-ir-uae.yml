@@ -1,18 +1,13 @@
 services:
-  - name: service-uae
+  - name: service-basij.somimobile.com
     addr: :443
     handler:
       type: tcp
-      chain: chain-uae
+      chain: chain-basij
     listener:
       type: tcp
-    forwarder:
-      nodes:
-        - name: target-local-trojan
-          addr: 127.0.0.1:443
-
 chains:
-  - name: chain-uae
+  - name: chain-basij
     hops:
       - name: hop-0
         nodes:
