@@ -12,7 +12,7 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: emirate.somimobile.com:3443
+            addr: basij.somimobile.com:3443
             connector:
               type: relay
             dialer:
