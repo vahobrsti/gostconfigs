@@ -8,7 +8,7 @@ services:
     forwarder:
       nodes:
         - name: target-v2ray
-          addr: :8443
+          addr: :7443
 
 
 tls:
