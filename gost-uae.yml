@@ -1,6 +1,6 @@
 services:
   - name: service-bahrain
-    addr: :2822
+    addr: :3443
     handler:
       type: relay
     listener:
