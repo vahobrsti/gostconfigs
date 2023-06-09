@@ -43,7 +43,7 @@ chains:
       - name: hop-0
         nodes:
           - name: node-0
-            addr: admin.somimobile.com:3233
+            addr: admin.somimobile.com:3232
             connector:
               type: relay
             dialer:
