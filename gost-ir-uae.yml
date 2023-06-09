@@ -11,9 +11,12 @@ chains:
     hops:
       - name: hop-0
         nodes:
-          - name: node-basij
-            addr: basij.somimobile.com:443
+          - name: node-0
+            addr: basij.somimobile.com:3443
             connector:
-              type: forward
-            handler:
-              type: tun
+              type: relay
+            dialer:
+              type: grpc
+              tls:
+                secure: true
+
