@@ -16,7 +16,7 @@ chains:
             connector:
               type: relay
             dialer:
-              type: grpc
+              type: tls
               tls:
                 secure: true
 

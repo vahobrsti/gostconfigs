@@ -4,7 +4,7 @@ services:
     handler:
       type: relay
     listener:
-      type: grpc
+      type: tls
     forwarder:
       nodes:
         - name: target-v2ray
