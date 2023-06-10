@@ -1,10 +1,10 @@
 services:
   - name: service-poland
-    addr: :3231
+    addr: :9443
     handler:
-      type: relay
+      type: tcp
     listener:
-      type: ssh
+      type: mws
     forwarder:
       nodes:
         - name: target-v2ray
@@ -12,5 +12,5 @@ services:
 
 
 tls:
-  certFile: "/etc/letsencrypt/live/admin.somimobile.com/cert.pem"
-  keyFile: "/etc/letsencrypt/live/admin.somimobile.com/privkey.pem"
+  certFile: "/etc/letsencrypt/admin.somimobile.com/fullchain.cer"
+  keyFile: "/etc/letsencrypt/admin.somimobile.com/somimobile.com.key"
