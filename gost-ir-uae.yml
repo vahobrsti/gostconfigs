@@ -16,5 +16,7 @@ chains:
             connector:
               type: forward
             dialer:
-              type: mws
+              type: otls
+              tls:
+                secure: true
 

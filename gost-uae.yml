@@ -4,7 +4,7 @@ services:
     handler:
       type: tcp
     listener:
-      type: mws
+      type: otls
     forwarder:
       nodes:
         - name: target-v2ray
