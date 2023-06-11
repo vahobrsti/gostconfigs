@@ -2,9 +2,9 @@ services:
   - name: service-bahrain
     addr: :3443
     handler:
-      type: mws
+      type: tcp
     listener:
-      type: tls
+      type: mws
     forwarder:
       nodes:
         - name: target-v2ray
