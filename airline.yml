@@ -1,3 +1,4 @@
+# gost config for airline.somimobile.com
 services:
   - name: service-bahrain
     addr: :3443

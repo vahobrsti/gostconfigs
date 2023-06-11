@@ -1,13 +1,14 @@
+#gost config for tickets.somimobile.com. backup server just in case
 services:
-  - name: service-basij.somimobile.com
+  - name: service-airline.somimobile.com
     addr: :443
     handler:
       type: tcp
-      chain: chain-basij
+      chain: chain-airline
     listener:
       type: tcp
 chains:
-  - name: chain-basij
+  - name: chain-airline
     hops:
       - name: hop-0
         nodes:

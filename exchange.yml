@@ -1,3 +1,5 @@
+# gost config for exchange.somimobile.com
+
 services:
   - name: service-france
     addr: :7443
