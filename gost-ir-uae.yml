@@ -14,9 +14,7 @@ chains:
           - name: node-0
             addr: basij.somimobile.com:3443
             connector:
-              type: relay
+              type: forward
             dialer:
-              type: tls
-              tls:
-                secure: true
+              type: mws
 

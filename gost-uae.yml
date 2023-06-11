@@ -2,7 +2,7 @@ services:
   - name: service-bahrain
     addr: :3443
     handler:
-      type: relay
+      type: mws
     listener:
       type: tls
     forwarder:
