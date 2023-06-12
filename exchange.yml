@@ -45,7 +45,7 @@ chains:
             connector:
               type: forward
             dialer:
-              type: mws
+              type: otls
 
   - name: chain-bahrain
     hops:
