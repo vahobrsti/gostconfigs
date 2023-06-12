@@ -55,5 +55,5 @@ chains:
             addr: foroush.somimobile.com:6443
             connector:
               type: forward
-            handler:
-              type: tun
+            dialer:
+              type: tcp
