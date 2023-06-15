@@ -1,29 +1,47 @@
 # gost config for exchange.somimobile.com
-
 services:
-  - name: service-france
+  - name: service-airline
+    addr: :443
+    handler:
+      type: tcp
+      chain: chain-airline
+    listener:
+      type: tcp
+  - name: service-uat
     addr: :7443
     handler:
       type: tcp
-      chain: chain-france
+      chain: chain-uat
     listener:
       type: tcp
-  - name: service-poland-trojan
+  - name: service-admin
     addr: :8443
     handler:
       type: tcp
-      chain: chain-poland
+      chain: chain-admin
     listener:
       type: tcp
-  - name: service-bahrain
+  - name: service-foroush
     addr: :6443
     handler:
       type: tcp
-      chain: chain-bahrain
+      chain: chain-foroush
     listener:
       type: tcp
+  
 chains:
-  - name: chain-france
+  - name: chain-airline
+    hops:
+      - name: hop-0
+        nodes:
+          - name: node-0
+            addr: foroush.somimobile.com:443
+            connector:
+              type: forward
+            dialer:
+              type: tcp
+
+  - name: chain-uat
     hops:
       - name: hop-0
         nodes:
@@ -36,7 +54,7 @@ chains:
               tls:
                 secure: true
 
-  - name: chain-poland
+  - name: chain-admin
     hops:
       - name: hop-0
         nodes:
@@ -47,12 +65,12 @@ chains:
             dialer:
               type: otls
 
-  - name: chain-bahrain
+  - name: chain-foroush
     hops:
-      - name: hop-bahrain
+      - name: hop-foroush
         nodes:
-          - name: node-bahrain
-            addr: foroush.somimobile.com:6443
+          - name: node-foroush
+            addr: airline.somimobile.com:6443
             connector:
               type: forward
             dialer:
