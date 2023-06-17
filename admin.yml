@@ -1,6 +1,6 @@
 services:
   - name: service-poland
-    addr: :9443
+    addr: :5443
     handler:
       type: tcp
     listener:
