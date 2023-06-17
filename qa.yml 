@@ -1,0 +1,24 @@
+services:
+  - name: service-0
+    addr: :9443
+    handler:
+      type: auto
+      chain: chain-0
+    listener:
+      type: grpc
+chains:
+  - name: chain-0
+    hops:
+      - name: hop-0
+        nodes:
+          - name: node-0
+            addr: :7443
+            connector:
+              type: forward
+            dialer:
+              type: tcp
+
+
+tls:
+  certFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.cer"
+  keyFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.key"
