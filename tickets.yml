@@ -1,12 +1,5 @@
 #gost config for tickets.somimobile.com. backup server just in case
 services:
-  - name: service-0
-    addr: :7443
-    handler:
-      type: tcp
-      chain: chain-0
-    listener:
-      type: tcp
   - name: service-airline
     addr: :443
     handler:
@@ -17,19 +10,6 @@ services:
 
 
 chains:
-  - name: chain-0
-    hops:
-      - name: hop-0
-        nodes:
-          - name: node-0
-            addr: qa.somimobile.com:9443
-            connector:
-              type: forward
-            dialer:
-              type: grpc
-              tls:
-                secure: true
-                serverName: qa.somimobile.com
   - name: chain-airline
     hops:
       - name: hop-0

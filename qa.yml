@@ -2,7 +2,7 @@ services:
   - name: service-0
     addr: :9443
     handler:
-      type: auto
+      type: tcp
       chain: chain-0
     listener:
       type: grpc
