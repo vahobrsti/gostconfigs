@@ -1,0 +1,16 @@
+frontend my-frontend
+  # bind *:443
+   bind *:7443
+   bind *:6443
+   bind *:8443
+   mode tcp
+
+   use_backend backend-servers
+
+backend backend-servers
+   mode tcp
+   balance leastconn
+   server admin admin.somimobile.com:{{ dst_port }} check
+   server uat uat.somimobile.com:{{ dst_port }} check
+   server foroush foroush.somimobile.com:{{ dst_port }} check
+   server airline airline.somimobile.com:{{ dst_port }} check
