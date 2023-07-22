@@ -9,7 +9,7 @@ create_backup() {
   DESTINATION="config.zip"
 
   # Prompt the user to enter the password
-  read -s -p "Enter the password to encrypt the zip file: " PASSWORD
+  read -p "Enter the password to encrypt the zip file: " PASSWORD
   echo
 
   mkdir "$SOURCE"
