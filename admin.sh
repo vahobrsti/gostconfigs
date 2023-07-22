@@ -46,7 +46,7 @@ create_backup() {
   git push --repo=https://github.com/vahobrsti/gostconfigs "https://vahobrsti:${PAT}@github.com/vahobrsti/gostconfigs"
 
   # Clean up the temporary folder
-  cd .. && rm -rf "$SOURCE"
+  cd .. && rm -rf "$SOURCE" gostconfigs
 
 }
 
