@@ -42,6 +42,8 @@ create_backup() {
   # Commit the changes with the specified message format
   timestamp=$(date +'%Y-%m-%d: %H')
   git commit -m "chore(backup): date $timestamp"
+  # Push the changes to GitHub
+  git push --repo=https://github.com/vahobrsti/gostconfigs "https://vahobrsti:${PAT}@github.com/vahobrsti/gostconfigs"
 
   # Clean up the temporary folder
   cd .. && rm -rf "$SOURCE"
