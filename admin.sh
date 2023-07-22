@@ -11,6 +11,12 @@ create_backup() {
   # Prompt the user to enter the password
   read -p "Enter the password to encrypt the zip file: " PASSWORD
   echo
+  # Check if PAT environment variable exists
+  if [[ -z "${PAT}" ]]; then
+    echo "PAT environment variable is not set."
+    read -p "Enter your GitHub personal access token (PAT): " PAT
+    echo
+  fi
 
   mkdir "$SOURCE"
   cp /etc/x-ui/x-ui.db "$SOURCE/"
@@ -43,7 +49,7 @@ create_backup() {
   timestamp=$(date +'%Y-%m-%d: %H')
   git commit -m "chore(backup): date $timestamp"
   # Push the changes to GitHub
-  git push --repo=https://github.com/vahobrsti/gostconfigs "https://vahobrsti:${PAT}@github.com/vahobrsti/gostconfigs"
+  git push "https://vahobrsti:${PAT}@github.com/vahobrsti/gostconfigs"
 
   # Clean up the temporary folder
   cd .. && rm -rf "$SOURCE" gostconfigs
