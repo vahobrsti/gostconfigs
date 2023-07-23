@@ -49,7 +49,6 @@ create_backup() {
 }
 
 server_installation() {
-  echo "Enter the password for the encrypted zip file:"
   read -p "Enter the password to encrypt the zip file: " password
 
   # Specify the path to the zip file
