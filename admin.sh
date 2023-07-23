@@ -146,12 +146,14 @@ server_installation() {
     # Clone the ocserv repository
     git clone https://gitlab.com/openconnect/ocserv.git
     cd ocserv || exit
-    apt install -y libgnutls28-dev libev-dev autoconf automake pam-devel lz4-devel libseccomp-devel readline-devel \
-                                                               	libnl3-devel krb5-devel radcli-devel libcurl-devel cjose-devel \
-                                                               	jansson-devel liboath-devel protobuf-c-devel libtalloc-devel \
-                                                               	http-parser-devel protobuf-c gperf nuttcp lcov uid_wrapper \
-                                                               	pam_wrapper nss_wrapper socket_wrapper gssntlmssp  iputils \
-                                                               	freeradius gawk gnutls-utils iproute yajl ocserv
+    apt install -y libgnutls28-dev libev-dev autoconf automake libpam0g-dev liblz4-dev libseccomp-dev \
+                                                               	libreadline-dev libnl-route-3-dev libkrb5-dev libradcli-dev \
+                                                               	libcurl4-gnutls-dev libcjose-dev libjansson-dev liboath-dev \
+                                                               	libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
+                                                               	gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
+                                                               	libsocket-wrapper gss-ntlmssp  iputils-ping freeradius \
+                                                               	gawk gnutls-bin iproute2 yajl-tools ocserv
+
 
     # Build and install ocserv
     autoreconf -fvi
