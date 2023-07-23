@@ -96,11 +96,67 @@ server_installation() {
     ;;
   2)
     echo "Performing AdGuard Home installation..."
-    # Add AdGuard Home installation command here
+    # Move into the extracted config directory
+    cd config || exit
+
+    # Download and execute the installation script for AdGuard Home
+    curl -sSL https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
+
+    # Copy the AdGuardHome.yaml file
+    cp AdGuardHome.yaml /opt/AdGuardHome/AdGuardHome.yaml
+
+    # Stop AdGuard Home service
+    /opt/AdGuardHome/AdGuardHome -s stop
+
+    # Create directory for systemd configuration
+    mkdir /etc/systemd/resolved.conf.d
+    cd /etc/systemd/resolved.conf.d || exit
+
+    # Create adguardhome.conf with DNS configuration
+    echo "[Resolve]" >>adguardhome.conf
+    echo "DNS=127.0.0.1" >>adguardhome.conf
+    echo "DNSStubListener=no" >>adguardhome.conf
+
+    # Backup and replace resolv.conf with a symbolic link
+    mv /etc/resolv.conf /etc/resolv.conf.backup
+    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+    # Reload and restart systemd-resolved service
+    systemctl reload-or-restart systemd-resolved
+
+    # Restart AdGuard Home service
+    /opt/AdGuardHome/AdGuardHome -s restart
+    netstat -tulpn
+    echo "AdGuard Home installation completed."
     ;;
   3)
     echo "Performing ocserv installation..."
-    # Add ocserv installation command here
+    # Clone the ocserv repository
+    git clone https://gitlab.com/openconnect/ocserv.git
+    cd ocserv || exit
+    apt install -y libgnutls28-dev libev-dev autoconf automake pam-devel lz4-devel libseccomp-devel readline-devel \
+                                                               	libnl3-devel krb5-devel radcli-devel libcurl-devel cjose-devel \
+                                                               	jansson-devel liboath-devel protobuf-c-devel libtalloc-devel \
+                                                               	http-parser-devel protobuf-c gperf nuttcp lcov uid_wrapper \
+                                                               	pam_wrapper nss_wrapper socket_wrapper gssntlmssp  iputils \
+                                                               	freeradius gawk gnutls-utils iproute yajl ocserv
+
+    # Build and install ocserv
+    autoreconf -fvi
+    ./configure && make && make install
+
+    # Update the ocserv service path in the systemd configuration
+    sed -i "s/ExecStart=\/usr\/sbin\/ocserv/ExecStart=\/usr\/local\/sbin\/ocserv/" /lib/systemd/system/ocserv.service
+    cd config || exit
+    server_ip=$(curl -sS checkip.amazonaws.com)
+    sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
+    cp cp ocserv.conf /etc/ocserv/
+    cp ocpasswd /etc/ocserv/
+    systemctl daemon-reload
+    systemctl restart ocserv
+    systemctl status ocserv
+    echo "ocserv installation completed."
+
     ;;
   4)
     echo "Changing SSH port to 422..."
