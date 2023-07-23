@@ -50,6 +50,17 @@ create_backup() {
 
 server_installation() {
   read -p "Enter the password to encrypt the zip file: " password
+  if ! command -v zip &> /dev/null; then
+      echo "zip command is not found. Installing zip..."
+      sudo apt-get install -y zip
+  fi
+
+  if ! command -v unzip &> /dev/null; then
+      echo "unzip command is not found. Installing unzip..."
+      sudo apt-get install -y unzip
+  fi
+
+  echo "zip and unzip are installed."
 
   # Specify the path to the zip file
   zip_file="gostconfigs/config.zip"
