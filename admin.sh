@@ -30,14 +30,6 @@ create_backup() {
   # Create the encrypted zip file
   zip -e -r -P "$PASSWORD" "$DESTINATION" "$SOURCE"
 
-  # Delete the gostconfigs directory if it exists
-  if [ -d "gostconfigs" ]; then
-    rm -rf "gostconfigs"
-  fi
-
-  # Clone the repository
-  git clone https://github.com/vahobrsti/gostconfigs
-
   # Copy and override the config.zip in gostconfigs folder
   cp -f "$DESTINATION" gostconfigs/
 
@@ -56,6 +48,28 @@ create_backup() {
 
 }
 
+server_installation() {
+  echo "Enter the password for the encrypted zip file:"
+  read -p password
+
+  # Specify the path to the zip file
+  zip_file="gostconfigs/config.zip"
+
+  # Extract the zip file using the provided password
+  echo "Extracting $zip_file..."
+  unzip -P "$password" "$zip_file"
+
+  echo "Extraction completed."
+
+}
+
+# Delete the gostconfigs directory if it exists
+if [ -d "gostconfigs" ]; then
+  rm -rf "gostconfigs"
+fi
+# Clone the repository
+git clone https://github.com/vahobrsti/gostconfigs
+
 echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. Some other option"
@@ -68,8 +82,7 @@ case $choice in
   create_backup
   ;;
 2)
-  echo "Performing some other action"
-  # Add your code here for option 2
+  server_installation
   ;;
 *)
   echo "Invalid choice"
