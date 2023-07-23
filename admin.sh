@@ -164,7 +164,7 @@ server_installation() {
     cd ./../config || exit
     server_ip=$(curl -sS checkip.amazonaws.com)
     sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
-    cp cp ocserv.conf /etc/ocserv/
+    cp ocserv.conf /etc/ocserv/
     cp ocpasswd /etc/ocserv/
     systemctl daemon-reload
     systemctl restart ocserv
