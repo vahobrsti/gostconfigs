@@ -147,7 +147,7 @@ server_installation() {
 
     # Update the ocserv service path in the systemd configuration
     sed -i "s/ExecStart=\/usr\/sbin\/ocserv/ExecStart=\/usr\/local\/sbin\/ocserv/" /lib/systemd/system/ocserv.service
-    cd config || exit
+    cd ./../config || exit
     server_ip=$(curl -sS checkip.amazonaws.com)
     sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
     cp cp ocserv.conf /etc/ocserv/
