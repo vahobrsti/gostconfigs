@@ -50,7 +50,7 @@ create_backup() {
 
 server_installation() {
   echo "Enter the password for the encrypted zip file:"
-  read -p password
+  read -p "Enter the password to encrypt the zip file: " password
 
   # Specify the path to the zip file
   zip_file="gostconfigs/config.zip"
@@ -72,7 +72,7 @@ git clone https://github.com/vahobrsti/gostconfigs
 
 echo "Select an option:"
 echo "1. Create backup of config folder"
-echo "2. Some other option"
+echo "2. server configurations"
 
 read -p "Enter your choice: " choice
 echo
