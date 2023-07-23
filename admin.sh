@@ -59,6 +59,64 @@ server_installation() {
   unzip -P "$password" "$zip_file"
 
   echo "Extraction completed."
+  # Prompt user for action selection
+  echo "Select an action to perform:"
+  echo "1. x-ui installation"
+  echo "2. AdGuard Home installation"
+  echo "3. ocserv installation"
+  echo "4. Change SSH port to 422"
+  echo "5. Firewall configuration"
+
+  read -p "Enter your choice (1-5): " choice
+
+  # Perform action based on user's choice
+  case $choice in
+  1)
+    echo "Performing x-ui installation..."
+    # Move into the extracted config directory
+    cd config || exit
+
+    # Perform x-ui installation
+    # Download and execute the installation script
+    bash <(curl -Ls https://raw.githubusercontent.com/sudospaes/x-ui/master/install.sh)
+
+    # Move the somimobile.com file
+    mv somimobile.com /etc/
+
+    # Copy the x-ui.db file
+    cp x-ui.db /etc/x-ui/x-ui.db
+
+    # Copy the config.json file
+    cp config.json /usr/local/x-ui/bin/config.json
+
+    # Restart x-ui service
+    systemctl restart x-ui
+
+    echo "x-ui installation completed."
+    ;;
+  2)
+    echo "Performing AdGuard Home installation..."
+    # Add AdGuard Home installation command here
+    ;;
+  3)
+    echo "Performing ocserv installation..."
+    # Add ocserv installation command here
+    ;;
+  4)
+    echo "Changing SSH port to 422..."
+    # Add SSH port change command here
+    ;;
+  5)
+    echo "Performing firewall configuration..."
+    # Add firewall configuration command here
+    ;;
+  *)
+    echo "Invalid choice. Exiting."
+    exit 1
+    ;;
+  esac
+
+  echo "Action completed."
 
 }
 
