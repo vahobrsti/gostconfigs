@@ -210,10 +210,6 @@ server_installation() {
 
 }
 
-# source and update and & upgrade
-source ~/.bashrc
-apt update -y
-apt upgrade -y
 # Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
   # Change into the gostconfigs directory
