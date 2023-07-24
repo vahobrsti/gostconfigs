@@ -151,8 +151,8 @@ server_installation() {
       libcurl4-gnutls-dev libcjose-dev libjansson-dev liboath-dev \
       libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
       gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
-      libsocket-wrapper gss-ntlmssp iputils-ping \
-      gawk gnutls-bin iproute2 yajl-tools ocserv
+      libsocket-wrapper gss-ntlmssp iputils-ping freeradius \
+      gawk gnutls-bin iproute2 yajl-tools tcpdump ocserv
 
     # Build and install ocserv
     autoreconf -fvi
