@@ -49,7 +49,18 @@ create_backup() {
 }
 
 server_installation() {
-  read -p "Enter the password to encrypt the zip file: " password
+  # Check if ZIPPASS environment variable exists
+  if [[ -z "$ZIPPASS" ]]; then
+      # Prompt the user to enter the password and store it in a variable
+      read -p "Enter the password to encrypt the zip file: " password
+
+      # Set the ZIPPASS environment variable with the entered password
+      export ZIPPASS="$password"
+  else
+      # Use the existing ZIPPASS environment variable as the password
+      password="$ZIPPASS"
+  fi
+
   if ! command -v zip &>/dev/null; then
     echo "zip command is not found. Installing zip..."
     sudo apt-get install -y zip
