@@ -50,14 +50,14 @@ create_backup() {
 
 server_installation() {
   read -p "Enter the password to encrypt the zip file: " password
-  if ! command -v zip &> /dev/null; then
-      echo "zip command is not found. Installing zip..."
-      sudo apt-get install -y zip
+  if ! command -v zip &>/dev/null; then
+    echo "zip command is not found. Installing zip..."
+    sudo apt-get install -y zip
   fi
 
-  if ! command -v unzip &> /dev/null; then
-      echo "unzip command is not found. Installing unzip..."
-      sudo apt-get install -y unzip
+  if ! command -v unzip &>/dev/null; then
+    echo "unzip command is not found. Installing unzip..."
+    sudo apt-get install -y unzip
   fi
 
   echo "zip and unzip are installed."
@@ -147,13 +147,12 @@ server_installation() {
     git clone https://gitlab.com/openconnect/ocserv.git
     cd ocserv || exit
     apt install -y libgnutls28-dev libev-dev autoconf automake libpam0g-dev liblz4-dev libseccomp-dev \
-                                                               	libreadline-dev libnl-route-3-dev libkrb5-dev libradcli-dev \
-                                                               	libcurl4-gnutls-dev libcjose-dev libjansson-dev liboath-dev \
-                                                               	libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
-                                                               	gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
-                                                               	libsocket-wrapper gss-ntlmssp  iputils-ping  \
-                                                               	gawk gnutls-bin iproute2 yajl-tools ocserv
-
+      libreadline-dev libnl-route-3-dev libkrb5-dev libradcli-dev \
+      libcurl4-gnutls-dev libcjose-dev libjansson-dev liboath-dev \
+      libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
+      gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
+      libsocket-wrapper gss-ntlmssp iputils-ping \
+      gawk gnutls-bin iproute2 yajl-tools ocserv
 
     # Build and install ocserv
     autoreconf -fvi
@@ -162,10 +161,20 @@ server_installation() {
     # Update the ocserv service path in the systemd configuration
     sed -i "s/ExecStart=\/usr\/sbin\/ocserv/ExecStart=\/usr\/local\/sbin\/ocserv/" /lib/systemd/system/ocserv.service
     cd ./../config || exit
-    server_ip=$(curl -sS checkip.amazonaws.com)
+    server_ip=$(hostname -I | awk '{print $1}')
     sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
     cp ocserv.conf /etc/ocserv/
     cp ocpasswd /etc/ocserv/
+    # enable ip forwarding
+    echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.d/60-custom.conf
+    echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.d/60-custom.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.d/60-custom.conf
+    sudo sysctl -p /etc/sysctl.d/60-custom.conf
+    # Find the main network interface
+    net_interface=$(ip route | awk '/default/ {print $5}')
+    # Use the network interface in the iptables command
+    iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o "$net_interface" -j MASQUERADE
+
     systemctl daemon-reload
     systemctl restart ocserv
     systemctl status ocserv
