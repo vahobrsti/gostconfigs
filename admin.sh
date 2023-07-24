@@ -119,7 +119,6 @@ server_installation() {
   2)
     echo "Performing AdGuard Home installation..."
     # Move into the extracted config directory
-    apt install -y net-tools
     cd config || exit
 
     # Download and execute the installation script for AdGuard Home
@@ -149,7 +148,6 @@ server_installation() {
 
     # Restart AdGuard Home service
     /opt/AdGuardHome/AdGuardHome -s restart
-    netstat -tulpn
     echo "AdGuard Home installation completed."
     ;;
   3)
