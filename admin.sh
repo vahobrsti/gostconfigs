@@ -230,7 +230,7 @@ else
   # Clone the repository
   git clone https://github.com/vahobrsti/gostconfigs
 fi
-
+source ~/.bashrc
 echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. server configurations"
