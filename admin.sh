@@ -51,14 +51,14 @@ create_backup() {
 server_installation() {
   # Check if ZIPPASS environment variable exists
   if [[ -z "$ZIPPASS" ]]; then
-      # Prompt the user to enter the password and store it in a variable
-      read -p "Enter the password to encrypt the zip file: " password
+    # Prompt the user to enter the password and store it in a variable
+    read -p "Enter the password to encrypt the zip file: " password
 
-      # Set the ZIPPASS environment variable with the entered password
-      echo 'export ZIPPASS="$password"' >> ~/.bashrc
+    # Set the ZIPPASS environment variable with the entered password
+    echo "export ZIPPASS=\"$password\"" >>~/.bashrc
   else
-      # Use the existing ZIPPASS environment variable as the password
-      password="$ZIPPASS"
+    # Use the existing ZIPPASS environment variable as the password
+    password="$ZIPPASS"
   fi
 
   if ! command -v zip &>/dev/null; then
@@ -70,8 +70,15 @@ server_installation() {
     echo "unzip command is not found. Installing unzip..."
     sudo apt-get install -y unzip
   fi
+  # Check if netstat command exists
+  if ! command -v netstat &> /dev/null; then
+      # Install net-tools package
+      sudo apt-get update
+      sudo apt-get install net-tools -y
+  fi
 
-  echo "zip and unzip are installed."
+
+  echo "zip, unzip and net-tools are installed."
 
   # Specify the path to the zip file
   zip_file="gostconfigs/config.zip"
@@ -223,7 +230,6 @@ else
   # Clone the repository
   git clone https://github.com/vahobrsti/gostconfigs
 fi
-
 
 echo "Select an option:"
 echo "1. Create backup of config folder"
