@@ -166,7 +166,7 @@ server_installation() {
       libcurl4-gnutls-dev libcjose-dev libjansson-dev liboath-dev \
       libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
       gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
-      libsocket-wrapper gss-ntlmssp iputils-ping  \
+      libsocket-wrapper gss-ntlmssp iputils-ping \
       gawk gnutls-bin iproute2 yajl-tools tcpdump ocserv
 
     # Build and install ocserv
@@ -214,6 +214,33 @@ server_installation() {
 
 }
 
+synchronize() {
+  # Password retrieval logic
+  if [[ -f "password.txt" ]]; then
+    password=$(cat "password.txt")
+  else
+    read -p "Enter the password to extract the zip file: " password
+    echo "$password" >"password.txt"
+  fi
+
+  # Specify the path to the zip file
+  zip_file="gostconfigs/config.zip"
+
+  # Extract the zip file using the provided password
+  echo "Extracting $zip_file..."
+  unzip -o -P "$password" "$zip_file"
+
+  # File copy and service restart
+  cp config/config.json /usr/local/x-ui/bin/config.json
+  cp config/x-ui.db /etc/x-ui/x-ui.db
+  systemctl restart x-ui
+
+  cp config/ocserv.conf /etc/ocserv/
+  cp config/ocpasswd /etc/ocserv/
+
+  systemctl restart ocserv
+}
+
 # Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
   # Change into the gostconfigs directory
@@ -232,6 +259,7 @@ fi
 echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. server configurations"
+echo "3. Sync the configs"
 
 read -p "Enter your choice: " choice
 echo
@@ -242,6 +270,9 @@ case $choice in
   ;;
 2)
   server_installation
+  ;;
+3)
+  synchronize
   ;;
 *)
   echo "Invalid choice"
