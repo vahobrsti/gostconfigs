@@ -55,7 +55,7 @@ server_installation() {
       read -p "Enter the password to encrypt the zip file: " password
 
       # Set the ZIPPASS environment variable with the entered password
-      export ZIPPASS="$password"
+      echo 'export ZIPPASS="$password"' >> ~/.bashrc
   else
       # Use the existing ZIPPASS environment variable as the password
       password="$ZIPPASS"
@@ -78,7 +78,7 @@ server_installation() {
 
   # Extract the zip file using the provided password
   echo "Extracting $zip_file..."
-  unzip -P "$password" "$zip_file"
+  unzip -o -P "$password" "$zip_file"
 
   echo "Extraction completed."
   # Prompt user for action selection
@@ -210,12 +210,24 @@ server_installation() {
 
 }
 
-# Delete the gostconfigs directory if it exists
+source ~/.bashrc
+
+# Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
-  rm -rf "gostconfigs"
+  # Change into the gostconfigs directory
+  cd "gostconfigs"
+
+  # Perform a git pull to update the repository
+  git reset --hard
+  git pull
+
+  # Go back to the original directory
+  cd -
+else
+  # Clone the repository
+  git clone https://github.com/vahobrsti/gostconfigs
 fi
-# Clone the repository
-git clone https://github.com/vahobrsti/gostconfigs
+
 
 echo "Select an option:"
 echo "1. Create backup of config folder"
