@@ -170,7 +170,8 @@ server_installation() {
       libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
       gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
       libsocket-wrapper gss-ntlmssp iputils-ping \
-      gawk gnutls-bin iproute2 yajl-tools tcpdump ocserv
+      gawk gnutls-bin iproute2 yajl-tools tcpdump freeradius ocserv
+
 
     # Build and install ocserv
     autoreconf -fvi
