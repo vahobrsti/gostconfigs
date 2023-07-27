@@ -11,11 +11,14 @@ create_backup() {
   # Prompt the user to enter the password
   read -p "Enter the password to encrypt the zip file: " PASSWORD
   echo
-  # Check if PAT environment variable exists
-  if [[ -z "${PAT}" ]]; then
-    echo "PAT environment variable is not set."
+  # Check if PAT file  exists
+  PAT_FILE="pat.txt"
+
+  if [[ -f "${PAT_FILE}" ]]; then
+    PAT=$(cat "${PAT_FILE}")
+  else
     read -p "Enter your GitHub personal access token (PAT): " PAT
-    echo
+    echo "${PAT}" >"${PAT_FILE}"
   fi
 
   mkdir "$SOURCE"
