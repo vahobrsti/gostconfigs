@@ -110,10 +110,13 @@ server_installation() {
     # Perform x-ui installation
     # Download and execute the installation script
     bash <(curl -Ls https://raw.githubusercontent.com/sudospaes/x-ui/master/install.sh)
-
-    # Move the somimobile.com file
-    mv somimobile.com /etc/
-
+    # Move the somimobile.com certs
+    if [ ! -d /etc/somimobile.com ]; then
+      mv somimobile.com /etc/
+      echo "certs moved successfully!"
+    else
+      echo "Directory /etc/somimobile.com already exists. No action taken."
+    fi
     # Copy the x-ui.db file
     cp x-ui.db /etc/x-ui/x-ui.db
 
@@ -129,7 +132,13 @@ server_installation() {
     echo "Performing AdGuard Home installation..."
     # Move into the extracted config directory
     cd config || exit
-
+    # Move the somimobile.com certs
+    if [ ! -d /etc/somimobile.com ]; then
+      mv somimobile.com /etc/
+      echo "certs moved successfully!"
+    else
+      echo "Directory /etc/somimobile.com already exists. No action taken."
+    fi
     # Download and execute the installation script for AdGuard Home
     curl -sSL https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
 
@@ -161,6 +170,13 @@ server_installation() {
     ;;
   3)
     echo "Performing ocserv installation..."
+    # Move the somimobile.com certs
+    if [ ! -d /etc/somimobile.com ]; then
+      mv somimobile.com /etc/
+      echo "certs moved successfully!"
+    else
+      echo "Directory /etc/somimobile.com already exists. No action taken."
+    fi
     # Clone the ocserv repository
     git clone https://gitlab.com/openconnect/ocserv.git
     cd ocserv || exit
@@ -171,7 +187,6 @@ server_installation() {
       gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
       libsocket-wrapper gss-ntlmssp iputils-ping \
       gawk gnutls-bin iproute2 yajl-tools tcpdump freeradius ocserv
-
 
     # Build and install ocserv
     autoreconf -fvi
