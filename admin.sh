@@ -170,13 +170,7 @@ server_installation() {
     ;;
   3)
     echo "Performing ocserv installation..."
-    # Move the somimobile.com certs
-    if [ ! -d /etc/somimobile.com ]; then
-      mv somimobile.com /etc/
-      echo "certs moved successfully!"
-    else
-      echo "Directory /etc/somimobile.com already exists. No action taken."
-    fi
+
     # Clone the ocserv repository
     git clone https://gitlab.com/openconnect/ocserv.git
     cd ocserv || exit
@@ -195,6 +189,13 @@ server_installation() {
     # Update the ocserv service path in the systemd configuration
     sed -i "s/ExecStart=\/usr\/sbin\/ocserv/ExecStart=\/usr\/local\/sbin\/ocserv/" /lib/systemd/system/ocserv.service
     cd ./../config || exit
+    # Move the somimobile.com certs
+    if [ ! -d /etc/somimobile.com ]; then
+      mv somimobile.com /etc/
+      echo "certs moved successfully!"
+    else
+      echo "Directory /etc/somimobile.com already exists. No action taken."
+    fi
     server_ip=$(hostname -I | awk '{print $1}')
     sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
     cp ocserv.conf /etc/ocserv/
