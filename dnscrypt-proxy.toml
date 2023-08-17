@@ -869,8 +869,8 @@ skip_incompatible = false
 ## Optional, local, static list of additional servers
 ## Mostly useful for testing your own servers.
 
-[static]
+#[static]
 
-   [static.ccdns]
-      stamp = 'sdns://AgEAAAAAAAAADTE1Ny4yNDEuMTQuMTMAEWNjLnNvbWltb2JpbGUuY29tCi9kbnMtcXVlcnk'
+#   [static.ccdns]
+#      stamp = 'sdns://AgEAAAAAAAAADTE1Ny4yNDEuMTQuMTMAEWNjLnNvbWltb2JpbGUuY29tCi9kbnMtcXVlcnk'
        
