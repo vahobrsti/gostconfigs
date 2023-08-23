@@ -1,24 +1,12 @@
-services:
-  - name: service-0
-    addr: :9443
-    handler:
-      type: tcp
-      chain: chain-0
-    listener:
-      type: grpc
-chains:
-  - name: chain-0
-    hops:
-      - name: hop-0
-        nodes:
-          - name: node-0
-            addr: :7443
-            connector:
-              type: forward
-            dialer:
-              type: tcp
-
-
-tls:
-  certFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.cer"
-  keyFile: "/etc/letsencrypt/uat.somimobile.com/somimobile.com.key"
+network:
+  version: 2
+  tunnels:
+    he-ipv6:
+      mode: sit
+      remote: 185.232.117.249
+      local: 217.144.107.223
+      addresses:
+        - "2a09:4c0:57e0:261::2/64"
+      routes:
+        - to: default
+          via: "2a09:4c0:57e0:261::1"
