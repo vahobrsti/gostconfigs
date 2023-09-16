@@ -1,0 +1,42 @@
+#sit tunnel client
+
+network:
+  version: 2
+  tunnels:
+    he-ipv6:
+      mode: sit
+      remote: 216.66.86.122
+      local: 78.109.194.177
+      addresses:
+        - "2001:470:6e:381::2/64"
+      routes:
+        - to: "::/0"
+          via: "2001:470:6e:381::1"
+
+#sit tunnel server sudo tcpdump -i [eth0](https://www.google.com/search?q=eth0) [icmp6](https://www.google.com/search?q=icmp6)
+network:
+  version: 2
+  tunnels:
+    he-ipv6:
+      mode: sit
+      remote: 78.109.194.177
+      local: 107.189.30.43
+      addresses:
+        - "2605:6400:d4e0:1::2/64"
+
+# main
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: no
+      addresses:
+        - 2605:6400:d4e0::1/48
+        - 2605:6400:30:ea74::1/48
+      routes:
+        - to: "default"
+          via: "2605:6400:30::1"
+      
+      
+    
