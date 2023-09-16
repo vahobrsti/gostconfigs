@@ -1,5 +1,6 @@
 #!/bin/bash
 iptables -F
+iptables -P FORWARD ACCEPT
 # Print the iptables rule to allow established and related TCP connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 # Get a comma-separated list of all TCP ports that are currently open and store them in a variable.
