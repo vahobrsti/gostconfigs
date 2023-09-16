@@ -6,8 +6,8 @@ echo "Current Time : $current_time"
 # Stop the proxy service
 systemctl stop haproxy
 
-# Wait for 4 minutes
-sleep 240
+# Wait for 3 minutes
+sleep 180
 
 # Start the proxy service
 systemctl start haproxy
