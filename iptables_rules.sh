@@ -4,7 +4,7 @@ iptables -P FORWARD ACCEPT
 # Print the iptables rule to allow established and related TCP connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 # Get a comma-separated list of all TCP ports that are currently open and store them in a variable.
-open_ports=$(netstat -ntlp | grep -v "tcp6"| awk 'NR > 2 && $6 == "LISTEN" && $4 !~ /127\.0\.0\.*/ { split($4, a, ":"); printf "%s\n", a[length(a)] }' | sort -u | tr '\n' ',' | sed 's/,$//')
+open_ports=$(netstat -ntlp | grep -v "::1"| awk 'NR > 2 && $6 == "LISTEN" && $4 !~ /127\.0\.0\.*/ { split($4, a, ":"); printf "%s\n", a[length(a)] }' | sort -u | tr '\n' ',' | sed 's/,$//')
 # Get a comma-separated list of all CIDR ranges for the interfaces with a global scope
 cidr_ranges=$(ip -o -f inet addr show | awk '/scope global/ {split($4, a, " "); printf "%s\n", a[1]}' | tr '\n' ',' | sed 's/,$//')
 iptables -A INPUT -p tcp -m multiport --dports $open_ports -j ACCEPT
