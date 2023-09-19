@@ -234,7 +234,7 @@ server_installation() {
 
 }
 
-synchronize() {
+synchronize_xui() {
   # Password retrieval logic
   if [[ -f "password.txt" ]]; then
     password=$(cat "password.txt")
@@ -255,10 +255,10 @@ synchronize() {
   cp config/x-ui.db /etc/x-ui/x-ui.db
   systemctl restart x-ui
 
-  cp config/ocserv.conf /etc/ocserv/
-  cp config/ocpasswd /etc/ocserv/
-
-  systemctl restart ocserv
+#  cp config/ocserv.conf /etc/ocserv/
+#  cp config/ocpasswd /etc/ocserv/
+#
+#  systemctl restart ocserv
 }
 
 # Check if the gostconfigs directory exists
@@ -292,7 +292,7 @@ case $choice in
   server_installation
   ;;
 3)
-  synchronize
+  synchronize_xui
   ;;
 *)
   echo "Invalid choice"
