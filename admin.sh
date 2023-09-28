@@ -255,9 +255,9 @@ synchronize_xui() {
   cp config/x-ui.db /etc/x-ui/x-ui.db
   systemctl restart x-ui
 
-#  cp config/ocserv.conf /etc/ocserv/
-#  cp config/ocpasswd /etc/ocserv/
-#
+  cp config/ocserv.conf /etc/ocserv/
+  cp config/ocpasswd /etc/ocserv/
+
 #  systemctl restart ocserv
 }
 
