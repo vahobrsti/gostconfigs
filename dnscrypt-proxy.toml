@@ -871,5 +871,5 @@ skip_incompatible = false
 [static]
 
    [static.ccdns]
-      stamp = 'sdns://AgcAAAAAAAAADDUyLjI5LjIzMC41NgASZnJhLnNvbWltb2JpbGUuY29tCi9kbnMtcXVlcnk'
+      stamp = 'sdns://AgcAAAAAAAAADTE2LjE3MS43Mi4yMjcAEmFybi5zb21pbW9iaWxlLmNvbQovZG5zLXF1ZXJ5'
        
