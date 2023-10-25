@@ -250,6 +250,7 @@ synchronize_xui() {
   echo "Extracting $zip_file..."
   unzip -o -P "$password" "$zip_file"
 
+  sudo cp -rf config/somimobile.com/* /etc/somimobile.com/
   # File copy and service restart
   cp config/config.json /usr/local/x-ui/bin/config.json
   cp config/x-ui.db /etc/x-ui/x-ui.db
