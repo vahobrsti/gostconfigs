@@ -251,15 +251,35 @@ synchronize_xui() {
   unzip -o -P "$password" "$zip_file"
 
   sudo cp -rf config/somimobile.com/* /etc/somimobile.com/
-  # File copy and service restart
-  cp config/config.json /usr/local/x-ui/bin/config.json
-  cp config/x-ui.db /etc/x-ui/x-ui.db
-  systemctl restart x-ui
 
-  cp config/ocserv.conf /etc/ocserv/
-  cp config/ocpasswd /etc/ocserv/
+}
 
-#  systemctl restart ocserv
+synchronize_xui_ocserv() {
+    # Password retrieval logic
+    if [[ -f "password.txt" ]]; then
+      password=$(cat "password.txt")
+    else
+      read -p "Enter the password to extract the zip file: " password
+      echo "$password" >"password.txt"
+    fi
+
+    # Specify the path to the zip file
+    zip_file="gostconfigs/config.zip"
+
+    # Extract the zip file using the provided password
+    echo "Extracting $zip_file..."
+    unzip -o -P "$password" "$zip_file"
+
+    # File copy and service restart
+    cp config/config.json /usr/local/x-ui/bin/config.json
+    cp config/x-ui.db /etc/x-ui/x-ui.db
+    systemctl restart x-ui
+
+    cp config/ocserv.conf /etc/ocserv/
+    cp config/ocpasswd /etc/ocserv/
+
+    systemctl restart ocserv
+
 }
 
 # Check if the gostconfigs directory exists
@@ -280,7 +300,7 @@ fi
 echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. server configurations"
-echo "3. Sync the configs"
+echo "3. Sync the certificates"
 
 read -p "Enter your choice: " choice
 echo
