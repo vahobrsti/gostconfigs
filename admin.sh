@@ -301,6 +301,7 @@ echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. server configurations"
 echo "3. Sync the certificates"
+echo "4. Sync the xui and ocserv"
 
 read -p "Enter your choice: " choice
 echo
@@ -314,6 +315,9 @@ case $choice in
   ;;
 3)
   synchronize_xui
+  ;;
+4)
+  synchronize_xui_ocserv
   ;;
 *)
   echo "Invalid choice"
