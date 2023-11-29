@@ -278,7 +278,7 @@ synchronize_xui_ocserv() {
     cp config/ocserv.conf /etc/ocserv/
     cp config/ocpasswd /etc/ocserv/
 
-    systemctl restart ocserv
+    #systemctl restart ocserv
 
 }
 
