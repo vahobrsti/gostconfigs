@@ -275,9 +275,11 @@ synchronize_xui_ocserv() {
     cp config/x-ui.db /etc/x-ui/x-ui.db
     systemctl restart x-ui
 
+    # find the ip address of the server and add it as the DNS server
+    server_ip=$(hostname -I | awk '{print $1}')
+    sed -i "s/^dns = .*/dns = $server_ip/" config/ocserv.conf
     cp config/ocserv.conf /etc/ocserv/
     cp config/ocpasswd /etc/ocserv/
-
     #systemctl restart ocserv
 
 }
