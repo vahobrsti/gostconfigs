@@ -109,7 +109,7 @@ server_installation() {
 
     # Perform x-ui installation
     # Download and execute the installation script
-    bash <(curl -Ls https://raw.githubusercontent.com/sudospaes/x-ui/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
     # Move the somimobile.com certs
     if [ ! -d /etc/somimobile.com ]; then
       mv somimobile.com /etc/
