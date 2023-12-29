@@ -270,9 +270,9 @@ synchronize_xui_ocserv() {
     unzip -o -P "$password" "$zip_file"
 
     # File copy and service restart
-    #cp config/config.json /usr/local/x-ui/bin/config.json
-    #cp config/x-ui.db /etc/x-ui/x-ui.db
-    #systemctl restart x-ui
+    cp config/config.json /usr/local/x-ui/bin/config.json
+    cp config/x-ui.db /etc/x-ui/x-ui.db
+    systemctl restart x-ui
 
     # find the ip address of the server and add it as the DNS server
     server_ip=$(hostname -I | awk '{print $1}')
