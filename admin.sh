@@ -22,12 +22,11 @@ create_backup() {
   fi
 
   mkdir "$SOURCE"
-  #cp /etc/x-ui/x-ui.db "$SOURCE/"
-  #cp /usr/local/x-ui/bin/config.json "$SOURCE/"
+  cp /etc/x-ui/x-ui.db "$SOURCE/"
+  cp /usr/local/x-ui/bin/config.json "$SOURCE/"
   cp /etc/ocserv/ocserv.conf "$SOURCE/"
   cp /etc/ocserv/ocpasswd "$SOURCE/"
   cp /opt/AdGuardHome/AdGuardHome.yaml "$SOURCE/"
-  iptables-save >>"$SOURCE/rules.v4"
   cp -r /etc/somimobile.com "$SOURCE/"
 
   # Create the encrypted zip file
@@ -271,9 +270,9 @@ synchronize_xui_ocserv() {
     unzip -o -P "$password" "$zip_file"
 
     # File copy and service restart
-    cp config/config.json /usr/local/x-ui/bin/config.json
-    cp config/x-ui.db /etc/x-ui/x-ui.db
-    systemctl restart x-ui
+    #cp config/config.json /usr/local/x-ui/bin/config.json
+    #cp config/x-ui.db /etc/x-ui/x-ui.db
+    #systemctl restart x-ui
 
     # find the ip address of the server and add it as the DNS server
     server_ip=$(hostname -I | awk '{print $1}')
