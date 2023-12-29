@@ -5,6 +5,23 @@ create_backup() {
     # If it exists, delete it
     rm -rf "config"
   fi
+
+  # Check if user.email is set in git config
+  if [ -z "$(git config --global --get user.email)" ]; then
+    echo "Setting git user.email..."
+    git config --global user.email "vahob.rasti@gmail.com"
+  else
+    echo "git user.email is already set."
+  fi
+
+  # Check if user.name is set in git config
+  if [ -z "$(git config --global --get user.name)" ]; then
+    echo "Setting git user.name..."
+    git config --global user.name "vahob"
+  else
+    echo "git user.name is already set."
+  fi
+
   SOURCE="config"
   DESTINATION="config.zip"
 
