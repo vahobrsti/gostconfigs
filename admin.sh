@@ -142,6 +142,13 @@ server_installation() {
     # Restart x-ui service
     systemctl restart x-ui
 
+    # Define the command to add to the crontab
+    CRON_CMD="0 */6 * * * systemctl restart x-ui"
+
+    # Add the command to the crontab
+    (crontab -l ; echo "$CRON_CMD") | crontab -
+
+
     echo "x-ui installation completed."
     ;;
   2)
