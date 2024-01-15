@@ -233,7 +233,36 @@ server_installation() {
     # Use the network interface in the iptables command
     iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o "$net_interface" -j MASQUERADE
 
+    cd ./../gostconfigs || exit
+
+
+    # Hardcoded iptables directory
+    iptables_dir="/etc/iptables"
+
+    # Step 1: Create the directory if it doesn't exist
+    if [ ! -d "$iptables_dir" ]; then
+        sudo mkdir -p "$iptables_dir"
+    fi
+
+    # Step 2: Copy the file and make it executable
+    sudo cp oc_nat.sh "/etc/iptables/oc_nat.sh"
+    sudo chmod +x "/etc/iptables/oc_nat.sh"
+
+    # Step 3: Create a systemd service
+    service_file="/etc/systemd/system/oc_nat.service"
+    echo "[Unit]
+    Description=Custom service to execute oc_nat.sh
+
+    [Service]
+    Type=oneshot
+    RemainAfterExit=true
+    ExecStart=/etc/iptables/oc_nat.sh
+
+    [Install]
+    WantedBy=multi-user.target" | sudo tee "$service_file" > /dev/null
+
     systemctl daemon-reload
+    systemctl enable oc_nat
     systemctl restart ocserv
     systemctl status ocserv
     echo "ocserv installation completed."
@@ -310,7 +339,7 @@ synchronize_xui_ocserv() {
 # Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
   # Change into the gostconfigs directory
-  cd "gostconfigs"
+  cd "gostconfigs" || exit
 
   # Perform a git pull to update the repository
   git reset --hard
