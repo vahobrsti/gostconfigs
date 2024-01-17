@@ -188,7 +188,7 @@ server_installation() {
     systemctl reload-or-restart systemd-resolved
 
     # Restart AdGuard Home service
-    /opt/AdGuardHome/AdGuardHome -s restart
+    /opt/AdGuardHome/AdGuardHome -s start
     echo "AdGuard Home installation completed."
     ;;
   3)
