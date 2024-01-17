@@ -162,8 +162,22 @@ server_installation() {
     else
       echo "Directory /etc/somimobile.com already exists. No action taken."
     fi
+    # Get the main network interface
+    net_interface=$(ip route | awk '/default/ {print $5}')
+
+    # Get the current IPv4 and IPv6 addresses from the main interface
+    ipv4_address=$(ip -o -4 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]}')
+    ipv6_address=$(ip -o -6 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]}')
+    wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64
+    chmod +x yq_linux_amd64
+    mv yq_linux_amd64 /usr/local/bin/yq
+
     # Download and execute the installation script for AdGuard Home
     curl -sSL https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v
+
+    # Clear existing bind_hosts values and add new ones
+    /usr/local/bin/yq eval -i '.dns.bind_hosts = []' AdGuardHome.yaml
+    /usr/local/bin/yq eval -i '.dns.bind_hosts += ["::1", "127.0.0.1", "'"${ipv4_address}"'", "'"${ipv6_address}"'"]' AdGuardHome.yaml
 
     # Copy the AdGuardHome.yaml file
     cp AdGuardHome.yaml /opt/AdGuardHome/AdGuardHome.yaml
@@ -286,7 +300,7 @@ server_installation() {
 
 }
 
-synchronize_xui() {
+synchronize_certificates() {
   # Password retrieval logic
   if [[ -f "password.txt" ]]; then
     password=$(cat "password.txt")
@@ -368,7 +382,7 @@ case $choice in
   server_installation
   ;;
 3)
-  synchronize_xui
+  synchronize_certificates
   ;;
 4)
   synchronize_xui_ocserv
