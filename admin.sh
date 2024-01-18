@@ -166,8 +166,8 @@ server_installation() {
     net_interface=$(ip route | awk '/default/ {print $5}')
 
     # Get the current IPv4 and IPv6 addresses from the main interface
-    ipv4_address=$(ip -o -4 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]}')
-    ipv6_address=$(ip -o -6 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]}')
+    ipv4_address=$(ip -o -4 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]; exit}')
+    ipv6_address=$(ip -o -6 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]; exit}')
     wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64
     chmod +x yq_linux_amd64
     mv yq_linux_amd64 /usr/local/bin/yq
