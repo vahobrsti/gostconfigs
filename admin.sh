@@ -392,6 +392,7 @@ else
   # Clone the repository
     if ! command -v git &>/dev/null; then
       sudo apt install git -y
+      sudo apt install iptables
     fi
   git clone https://github.com/vahobrsti/gostconfigs
 fi
