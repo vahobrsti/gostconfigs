@@ -93,7 +93,7 @@ server_installation() {
   if ! command -v netstat &>/dev/null; then
     # Install net-tools package
     sudo apt-get update
-    sudo apt-get install net-tools -y
+    sudo apt-get install net-tools git curl wget -y
   fi
 
   echo "zip, unzip and net-tools are installed."
