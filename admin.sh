@@ -363,6 +363,7 @@ if [ -d "gostconfigs" ]; then
   cd -
 else
   # Clone the repository
+  apt install git -y
   git clone https://github.com/vahobrsti/gostconfigs
 fi
 echo "Select an option:"
