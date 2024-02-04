@@ -350,6 +350,33 @@ synchronize_xui_ocserv() {
 
 }
 
+synchronize_adguardhome(){
+    # Move into the extracted config directory
+    cd config || exit
+    # Get the main network interface
+    net_interface=$(ip route | awk '/default/ {print $5}')
+
+    # Get the current IPv4 and IPv6 addresses from the main interface
+    ipv4_address=$(ip -o -4 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]; exit}')
+    ipv6_address=$(ip -o -6 addr show "$net_interface" | awk '{split($4, a, "/"); print a[1]; exit}')
+    if ! command -v yq &>/dev/null; then
+      wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64
+      chmod +x yq_linux_amd64
+      mv yq_linux_amd64 /usr/local/bin/yq
+    fi
+
+    # Clear existing bind_hosts values and add new ones
+    /usr/local/bin/yq eval -i '.dns.bind_hosts = []' AdGuardHome.yaml
+    /usr/local/bin/yq eval -i '.dns.bind_hosts += ["::1", "127.0.0.1", "'"${ipv4_address}"'", "'"${ipv6_address}"'"]' AdGuardHome.yaml
+    /opt/AdGuardHome/AdGuardHome -s stop
+
+    # Copy the AdGuardHome.yaml file
+    cp AdGuardHome.yaml /opt/AdGuardHome/AdGuardHome.yaml
+    # start AdGuard Home service
+    /opt/AdGuardHome/AdGuardHome -s start
+
+}
+
 # Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
   # Change into the gostconfigs directory
@@ -363,7 +390,9 @@ if [ -d "gostconfigs" ]; then
   cd -
 else
   # Clone the repository
-  apt install git -y
+    if ! command -v git &>/dev/null; then
+      sudo apt install git -y
+    fi
   git clone https://github.com/vahobrsti/gostconfigs
 fi
 echo "Select an option:"
@@ -371,6 +400,7 @@ echo "1. Create backup of config folder"
 echo "2. server configurations"
 echo "3. Sync the certificates"
 echo "4. Sync the xui and ocserv"
+echo "5. Sync  AdguardHome"
 
 read -p "Enter your choice: " choice
 echo
@@ -387,6 +417,9 @@ case $choice in
   ;;
 4)
   synchronize_xui_ocserv
+  ;;
+5)
+  synchronize_adguardhome
   ;;
 *)
   echo "Invalid choice"
