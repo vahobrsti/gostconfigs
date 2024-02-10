@@ -46,9 +46,28 @@ echo "options edns0" >> /etc/resolv.conf
 
 #haproxy
 apt install --no-install-recommends software-properties-common -y
-add-apt-repository ppa:vbernat/haproxy-2.8 -y
+add-apt-repository ppa:vbernat/haproxy-2.9 -y
 apt update
-apt install haproxy=2.8.\* -y
+apt install haproxy=2.9.\* -y
 cp ./gostconfigs/haproxy.cfg /etc/haproxy/haproxy.cfg
 systemctl restart haproxy
 systemctl status haproxy
+
+#wstunnel
+wget https://github.com/erebe/wstunnel/releases/download/v9.2.2/wstunnel_9.2.2_linux_amd64.tar.gz
+tar xvzf wstunnel_9.2.2_linux_amd64.tar.gz
+chmod +x wstunnel
+mv wstunnel /usr/local/bin/wstunnel
+nano /etc/systemd/system/wstunnel.service
+
+systemctl daemon-reload
+systemctl enable wstunnel.service
+systemctl start wstunnel.service
+
+#outline
+
+sudo curl -sS https://get.docker.com/ | sh
+sudo usermod -aG docker ubuntu
+sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
+
+
