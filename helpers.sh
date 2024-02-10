@@ -69,5 +69,11 @@ systemctl start wstunnel.service
 sudo curl -sS https://get.docker.com/ | sh
 sudo usermod -aG docker ubuntu
 sudo bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
+cp /etc/somimobile.com/somimobile.com.key /opt/outline/persisted-state/shadowbox-selfsigned.key
+cp /etc/somimobile.com/fullchain.cer /opt/outline/persisted-state/shadowbox-selfsigned.crt
 
+new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
+sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
+echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
+/opt/outline/persisted-state/start_container.sh
 
