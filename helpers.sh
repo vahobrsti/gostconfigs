@@ -38,12 +38,6 @@ echo "options edns0" >> /etc/resolv.conf
 
 
 
-
-
-
-
-
-
 #haproxy
 apt install --no-install-recommends software-properties-common -y
 add-apt-repository ppa:vbernat/haproxy-2.9 -y
@@ -76,4 +70,22 @@ new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsi
 sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
 echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
 /opt/outline/persisted-state/start_container.sh
+
+
+#ipset
+apt-get install ipset -y
+ipset -N china hash:net
+ipset -N russia hash:net
+
+wget -O cn.zone http://www.ipdeny.com/ipblocks/data/countries/cn.zone
+wget -O ru.zone http://www.ipdeny.com/ipblocks/data/countries/ru.zone
+
+for ip in $(cat cn.zone); do  ipset -A china $ip; done
+for ip in $(cat ru.zone); do  ipset -A russia $ip; done
+
+sudo iptables -A INPUT -m set --match-set china src -j DROP
+sudo iptables -A INPUT -m set --match-set russia src -j DROP
+
+
+
 
