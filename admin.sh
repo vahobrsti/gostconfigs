@@ -1,4 +1,12 @@
 #!/bin/bash
+retrieve_password() {
+    if [[ -f "password.txt" ]]; then
+        password=$(cat "password.txt")
+    else
+        read -p "Enter the password to extract the zip file: " password
+        echo "$password" > "password.txt"
+    fi
+}
 
 create_backup() {
   if [ -d "config" ]; then
@@ -68,18 +76,7 @@ create_backup() {
 }
 
 server_installation() {
-  # Check if "password.txt" exists
-  if [[ -f "password.txt" ]]; then
-    # Read the password from the file
-    password=$(cat "password.txt")
-  else
-    # Prompt the user to enter the password and store it in a variable
-    read -p "Enter the password to extract the zip file: " password
-
-    # Save the password to "password.txt" file
-    echo "$password" >"password.txt"
-  fi
-
+  retrieve_password
   if ! command -v zip &>/dev/null; then
     echo "zip command is not found. Installing zip..."
     sudo apt-get install -y zip
@@ -96,7 +93,6 @@ server_installation() {
     sudo apt-get install net-tools git curl wget -y
   fi
 
-  echo "zip, unzip and net-tools are installed."
 
   # Specify the path to the zip file
   zip_file="gostconfigs/config.zip"
@@ -105,13 +101,12 @@ server_installation() {
   echo "Extracting $zip_file..."
   unzip -o -P "$password" "$zip_file"
 
-  echo "Extraction completed."
   # Prompt user for action selection
   echo "Select an action to perform:"
   echo "1. x-ui installation"
   echo "2. AdGuard Home installation"
   echo "3. ocserv installation"
-  echo "4. Change SSH port to 422"
+  echo "4. gost installation"
   echo "5. Firewall configuration"
 
   read -p "Enter your choice (1-5): " choice
@@ -264,7 +259,8 @@ server_installation() {
 
     # Step 3: Create a systemd service
     service_file="/etc/systemd/system/oc_nat.service"
-    echo "[Unit]
+    echo "#adding iptables rules to nat table
+    [Unit]
     Description=Custom service to execute oc_nat.sh
 
     [Service]
@@ -283,7 +279,7 @@ server_installation() {
 
     ;;
   4)
-    echo "Changing SSH port to 422..."
+    echo "gost installation..."
     # Add SSH port change command here
     ;;
   5)
@@ -301,19 +297,13 @@ server_installation() {
 }
 
 synchronize_certificates() {
-  # Password retrieval logic
-  if [[ -f "password.txt" ]]; then
-    password=$(cat "password.txt")
-  else
-    read -p "Enter the password to extract the zip file: " password
-    echo "$password" >"password.txt"
-  fi
+  retrieve_password
 
   # Specify the path to the zip file
   zip_file="gostconfigs/config.zip"
 
   # Extract the zip file using the provided password
-  echo "Extracting $zip_file..."
+
   unzip -o -P "$password" "$zip_file"
 
   sudo cp -rf config/somimobile.com/* /etc/somimobile.com/
@@ -321,14 +311,7 @@ synchronize_certificates() {
 }
 
 synchronize_xui_ocserv() {
-    # Password retrieval logic
-    if [[ -f "password.txt" ]]; then
-      password=$(cat "password.txt")
-    else
-      read -p "Enter the password to extract the zip file: " password
-      echo "$password" >"password.txt"
-    fi
-
+    retrieve_password
     # Specify the path to the zip file
     zip_file="gostconfigs/config.zip"
 
@@ -351,6 +334,12 @@ synchronize_xui_ocserv() {
 }
 
 synchronize_adguardhome(){
+    retrieve_password
+    # Specify the path to the zip file
+    zip_file="gostconfigs/config.zip"
+
+    unzip -o -P "$password" "$zip_file"
+
     # Move into the extracted config directory
     cd config || exit
     # Get the main network interface
@@ -374,7 +363,6 @@ synchronize_adguardhome(){
     cp AdGuardHome.yaml /opt/AdGuardHome/AdGuardHome.yaml
     # start AdGuard Home service
     /opt/AdGuardHome/AdGuardHome -s start
-
 }
 
 # Check if the gostconfigs directory exists
@@ -391,8 +379,9 @@ if [ -d "gostconfigs" ]; then
 else
   # Clone the repository
     if ! command -v git &>/dev/null; then
+      sudo apt update -y
       sudo apt install git -y
-      sudo apt install iptables
+      sudo apt install iptables -y
     fi
   git clone https://github.com/vahobrsti/gostconfigs
 fi
