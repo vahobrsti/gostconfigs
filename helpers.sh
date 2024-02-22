@@ -87,5 +87,12 @@ sudo iptables -A INPUT -m set --match-set china src -j DROP
 sudo iptables -A INPUT -m set --match-set russia src -j DROP
 
 
+#tunnel using ip command
+
+ip tunnel add he-ipv6 mode sit remote "broker_ip" local "local_ip" ttl 255
+ip link set he-ipv6 up
+ip addr add "client_ip/64" dev he-ipv6
+ip -6 route add ::/0  via server_side_ip dev he-ipv6
+ip -f inet6 addr
 
 
