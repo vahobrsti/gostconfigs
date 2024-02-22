@@ -53,6 +53,7 @@ create_backup() {
   cp /etc/ocserv/ocpasswd "$SOURCE/"
   cp /opt/AdGuardHome/AdGuardHome.yaml "$SOURCE/"
   cp -r /etc/somimobile.com "$SOURCE/"
+  cp -r /opt/outline/persisted-state "$SOURCE/"
 
   # Create the encrypted zip file
   zip -e -r -P "$PASSWORD" "$DESTINATION" "$SOURCE"
@@ -106,7 +107,7 @@ server_installation() {
   echo "1. x-ui installation"
   echo "2. AdGuard Home installation"
   echo "3. ocserv installation"
-  echo "4. gost installation"
+  echo "4. Outline installation"
   echo "5. Firewall configuration"
 
   read -p "Enter your choice (1-5): " choice
@@ -276,11 +277,21 @@ server_installation() {
     systemctl restart ocserv
     systemctl status ocserv
     echo "ocserv installation completed."
-
     ;;
   4)
-    echo "gost installation..."
-    # Add SSH port change command here
+    echo "Performing Outline installation..."
+    # Move into the extracted config directory
+    cd config || exit
+    curl -sS https://get.docker.com/ | sh
+    usermod -aG docker ubuntu
+    bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
+    cp -rf persisted-state/* /opt/outline/persisted-state
+
+    new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
+    sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
+    echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
+    /opt/outline/persisted-state/start_container.sh
+
     ;;
   5)
     echo "Performing firewall configuration..."
@@ -310,7 +321,7 @@ synchronize_certificates() {
 
 }
 
-synchronize_xui_ocserv() {
+synchronize_xui() {
     retrieve_password
     # Specify the path to the zip file
     zip_file="gostconfigs/config.zip"
@@ -324,12 +335,7 @@ synchronize_xui_ocserv() {
     cp config/x-ui.db /etc/x-ui/x-ui.db
     systemctl restart x-ui
 
-    # find the ip address of the server and add it as the DNS server
-    server_ip=$(hostname -I | awk '{print $1}')
-    sed -i "s/^dns = .*/dns = $server_ip/" config/ocserv.conf
-    cp config/ocserv.conf /etc/ocserv/
-    cp config/ocpasswd /etc/ocserv/
-    #systemctl restart ocserv
+
 
 }
 
@@ -365,6 +371,24 @@ synchronize_adguardhome(){
     /opt/AdGuardHome/AdGuardHome -s start
 }
 
+synchronize_ocserv(){
+      retrieve_password
+      # Specify the path to the zip file
+      zip_file="gostconfigs/config.zip"
+
+      # Extract the zip file using the provided password
+      echo "Extracting $zip_file..."
+      unzip -o -P "$password" "$zip_file"
+
+      # find the ip address of the server and add it as the DNS server
+      server_ip=$(hostname -I | awk '{print $1}')
+      sed -i "s/^dns = .*/dns = $server_ip/" config/ocserv.conf
+      cp config/ocserv.conf /etc/ocserv/
+      cp config/ocpasswd /etc/ocserv/
+
+}
+
+
 # Check if the gostconfigs directory exists
 if [ -d "gostconfigs" ]; then
   # Change into the gostconfigs directory
@@ -389,8 +413,9 @@ echo "Select an option:"
 echo "1. Create backup of config folder"
 echo "2. server configurations"
 echo "3. Sync the certificates"
-echo "4. Sync the xui and ocserv"
+echo "4. Sync the xui"
 echo "5. Sync  AdguardHome"
+echo "6. Sync Ocserv"
 
 read -p "Enter your choice: " choice
 echo
@@ -406,10 +431,13 @@ case $choice in
   synchronize_certificates
   ;;
 4)
-  synchronize_xui_ocserv
+  synchronize_xui
   ;;
 5)
   synchronize_adguardhome
+  ;;
+6)
+  synchronize_ocserv
   ;;
 *)
   echo "Invalid choice"
