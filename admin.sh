@@ -312,6 +312,7 @@ server_installation() {
     systemctl daemon-reload
     systemctl enable wstunnel
     systemctl start wstunnel
+    sleep 2s
     netstat -tulnp
 
     ;;
