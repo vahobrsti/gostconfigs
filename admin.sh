@@ -282,10 +282,12 @@ server_installation() {
     echo "Performing Outline installation..."
     # Move into the extracted config directory
     cd config || exit
-    curl -sS https://get.docker.com/ | sh
-    usermod -aG docker ubuntu
-    bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
-    # restore the backup
+    if ! command -v docker &> /dev/null; then
+        echo "Docker is not installed. Installing Docker..."
+        curl -sS https://get.docker.com/ | sh
+        usermod -aG docker ubuntu
+        bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
+    fi
     rm -rf /opt/outline/persisted-state
     mv  persisted-state /opt/outline/
     new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
@@ -304,7 +306,6 @@ server_installation() {
     systemctl daemon-reload
     systemctl enable wstunnel
     systemctl start wstunnel
-    systemctl status wstunnel
     netstat -tulnp
 
     ;;
