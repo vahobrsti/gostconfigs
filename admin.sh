@@ -288,8 +288,14 @@ server_installation() {
         usermod -aG docker ubuntu
         bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
     fi
-    rm -rf /opt/outline/persisted-state
-    mv  persisted-state /opt/outline/
+
+    cp  -f persisted-state/shadowbox_config.json /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox_server_config.json /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox-selfsigned.key /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox-selfsigned.crt  /opt/outline/persisted-state
+    rm -rf /opt/outline/persisted-state/prometheus
+    mv  ./persisted-state/prometheus   /opt/outline/persisted-state
+
     new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
     sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
     echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
