@@ -96,3 +96,17 @@ ip -6 route add ::/0  via server_side_ip dev he-ipv6
 ip -f inet6 addr
 
 
+#random ipv6 from routed subnet
+
+#!/bin/bash
+
+for i in {1..5}
+ do
+    base_address="yyyy:xxxx:xxxx:"
+    random_part=$(printf "%04x:%04x:%04x:%04x:%04x" $((RANDOM%0x10000)) $((RANDOM%0x10000)) $((RANDOM%0x10000)) $((RANDOM%0x10000)) $((RANDOM%0x10000))  )
+    ip="$base_address$random_part"
+    echo $ip
+ done
+
+
+
