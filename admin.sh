@@ -287,7 +287,7 @@ server_installation() {
     bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
     # restore the backup
     rm -rf /opt/outline/persisted-state
-    cp -rf persisted-state/* /opt/outline/persisted-state
+    cp -r persisted-state /opt/outline/persisted-state
     new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
     sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
     echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
