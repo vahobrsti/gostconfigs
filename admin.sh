@@ -293,6 +293,20 @@ server_installation() {
     echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
     /opt/outline/persisted-state/start_container.sh
 
+    echo "Installing wstunnel for udp over tcp"
+    cd ./../gostconfigs || exit
+    wget https://github.com/erebe/wstunnel/releases/download/v9.2.3/wstunnel_9.2.3_linux_amd64.tar.gz
+    tar xvzf wstunnel_9.2.3_linux_amd64.tar.gz
+    chmod +x wstunnel
+    mv wstunnel /usr/local/bin
+
+    cp wstunnel-server.service /etc/systemd/system/wstunnel.service
+    systemctl daemon-reload
+    systemctl enable wstunnel
+    systemctl start wstunnel
+    systemctl status wstunnel
+    netstat -tulnp
+
     ;;
   5)
     echo "Performing firewall configuration..."
