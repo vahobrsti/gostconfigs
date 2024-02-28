@@ -53,7 +53,7 @@ create_backup() {
   cp /etc/ocserv/ocpasswd "$SOURCE/"
   cp /opt/AdGuardHome/AdGuardHome.yaml "$SOURCE/"
   cp -r /etc/somimobile.com "$SOURCE/"
-  #cp -r /opt/outline/persisted-state "$SOURCE/"
+  cp -r /opt/outline/persisted-state "$SOURCE/"
 
   # Create the encrypted zip file
   zip -e -r -P "$PASSWORD" "$DESTINATION" "$SOURCE"
