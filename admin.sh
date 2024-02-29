@@ -291,9 +291,8 @@ server_installation() {
         echo "Docker is not installed. Installing Docker..."
         curl -sS https://get.docker.com/ | sh
         usermod -aG docker ubuntu
-        bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
     fi
-
+    bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
     cp  -f persisted-state/shadowbox_config.json /opt/outline/persisted-state
     cp  -f persisted-state/shadowbox_server_config.json /opt/outline/persisted-state
     cp  -f persisted-state/shadowbox-selfsigned.key /opt/outline/persisted-state
