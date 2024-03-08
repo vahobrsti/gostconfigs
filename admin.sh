@@ -379,6 +379,29 @@ synchronize_xui() {
 
 }
 
+synchronize_outline(){
+    retrieve_password
+    # Specify the path to the zip file
+    zip_file="gostconfigs/config.zip"
+
+    # Extract the zip file using the provided password
+    echo "Extracting $zip_file..."
+    unzip -o -P "$password" "$zip_file"
+    cd config || exit
+    cp  -f persisted-state/shadowbox_config.json /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox_server_config.json /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox-selfsigned.key /opt/outline/persisted-state
+    cp  -f persisted-state/shadowbox-selfsigned.crt  /opt/outline/persisted-state
+    rm -rf /opt/outline/persisted-state/prometheus
+    mv  ./persisted-state/prometheus   /opt/outline/persisted-state
+
+    new_cert_sha256=$(openssl x509 -in /opt/outline/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | tr --delete : | awk -F'=' '{print $2}')
+    sed -i "s/certSha256:.*/certSha256:$new_cert_sha256/" /opt/outline/access.txt
+    echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
+    /opt/outline/persisted-state/start_container.sh
+}
+
+
 synchronize_adguardhome(){
     retrieve_password
     # Specify the path to the zip file
@@ -456,6 +479,7 @@ echo "3. Sync the certificates"
 echo "4. Sync the xui"
 echo "5. Sync  AdguardHome"
 echo "6. Sync Ocserv"
+echo "7. Sync Outline"
 
 read -p "Enter your choice: " choice
 echo
@@ -478,6 +502,8 @@ case $choice in
   ;;
 6)
   synchronize_ocserv
+  ;;
+7)synchronize_outline
   ;;
 *)
   echo "Invalid choice"
