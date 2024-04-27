@@ -14,3 +14,6 @@ iptables -A INPUT -s 127.0.0.1/8 -j ACCEPT
 # a final rule that drops any other incoming TCP connections
 iptables -A INPUT -p tcp -j DROP
 iptables -A INPUT -p udp -j DROP
+iptables -A INPUT -p icmp -j DROP
+ip6tables -A INPUT -p icmpv6 -j DROP
+
