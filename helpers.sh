@@ -109,4 +109,20 @@ for i in {1..5}
  done
 
 
+ # l2tpv3 tunnel
+ #We provide some examples to configure your tunnelbroker. Exact configuration depends on your local setup and may change.
+
+#Tunnel configuration for Linux:
+sudo ip l2tp add tunnel tunnel_id 9414 peer_tunnel_id 9414 encap ip local 95.38.153.xx remote 23.149.xxx.4
+sudo ip l2tp add session tunnel_id 9414 session_id 9414 peer_session_id 9414
+sudo ip link set l2tpeth0 up mtu 1500
+sudo ip -6 addr add 2a11:6c7:f01:xxx::2/64 dev l2tpeth0
+#After that your tunnel should be up and running and you can ping our ip addresses:
+
+ping 2a11:6c7:f01:xxx::1
+#If yes, you are ready to configure the default route to the IPv6 Internet.
+
+sudo ip route add ::/0 via dev TUNNEL-9414-R64
+
+
 
