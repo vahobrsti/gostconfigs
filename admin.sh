@@ -53,6 +53,7 @@ create_backup() {
   cp /etc/ocserv/ocpasswd "$SOURCE/"
   cp /opt/AdGuardHome/AdGuardHome.yaml "$SOURCE/"
   cp -r /etc/somimobile.com "$SOURCE/"
+  cp -r /home/ubuntu/certs "$SOURCE/"
   cp -r /opt/outline/persisted-state "$SOURCE/"
 
   # Check if config.zip exists, if yes, delete it
