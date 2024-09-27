@@ -238,6 +238,11 @@ server_installation() {
     sed -i "s/^dns = .*/dns = $server_ip/" ocserv.conf
     cp ocserv.conf /etc/ocserv/
     cp ocpasswd /etc/ocserv/
+    if [ ! -d "/home/ubuntu" ]; then
+    # If not, create the directory
+    mkdir -p /home/ubuntu
+    fi
+    mv ./certs /home/ubuntu/
     # enable ip forwarding
     iptables -P FORWARD ACCEPT
     echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.d/60-custom.conf
