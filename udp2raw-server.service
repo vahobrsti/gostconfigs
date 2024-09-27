@@ -5,7 +5,7 @@ Wants=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/wstunnel server --log-lvl WARN --websocket-mask-frame ws://[::]:8080
+ExecStart=/usr/local/bin/udp2raw  -s -l[::]:8080 -r127.0.0.1:5443    -k "vghdAbQf15su1zk4aTav0M66DdBBe" --raw-mode faketcp -a
 
 [Install]
 WantedBy=multi-user.target

@@ -306,17 +306,17 @@ server_installation() {
     echo "{\"certSha256\":\"$new_cert_sha256\",\"apiUrl\":\"$(grep apiUrl /opt/outline/access.txt | cut -d ':' -f 2-)\"}"
     /opt/outline/persisted-state/start_container.sh
 
-    echo "Installing wstunnel for udp over tcp"
+    echo "Installing udp2raw for udp over tcp"
     cd ./../gostconfigs || exit
-    wget https://github.com/erebe/wstunnel/releases/download/v9.2.3/wstunnel_9.2.3_linux_amd64.tar.gz
-    tar xvzf wstunnel_9.2.3_linux_amd64.tar.gz
-    chmod +x wstunnel
-    mv wstunnel /usr/local/bin
+    wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz    tar xvzf wstunnel_9.2.3_linux_amd64.tar.gz
+    tar xvzf udp2raw_binaries.tar.gz
+    cp udp2raw_x86 /usr/local/bin/udp2raw
 
-    cp wstunnel-server.service /etc/systemd/system/wstunnel.service
+
+    cp udp2raw-server.service /etc/systemd/system/udp2raw.service
     systemctl daemon-reload
-    systemctl enable wstunnel
-    systemctl start wstunnel
+    systemctl enable udp2raw
+    systemctl start udp2raw
     sleep 2s
     netstat -tulnp
 
