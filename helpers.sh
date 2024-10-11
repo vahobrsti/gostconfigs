@@ -16,7 +16,7 @@ update-ca-certificates
 
 # gost installation
 wget https://github.com/go-gost/gost/releases/download/v3.0.0-nightly.20241010/gost_3.0.0-nightly.20241010_linux_amd64.tar.gz
-tar xvzf gost_3.0.0-rc8_linux_amd64.tar.gz
+tar xvzf gost_3.0.0-nightly.20241010_linux_amd64.tar.gz
 mv gost /usr/local/bin/gost
 
 # dnscrypt configurations
