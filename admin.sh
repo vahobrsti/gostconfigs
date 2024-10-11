@@ -319,9 +319,17 @@ server_installation() {
 
 
     cp udp2raw-server.service /etc/systemd/system/udp2raw.service
+    # gost installation
+    wget https://github.com/go-gost/gost/releases/download/v3.0.0-nightly.20241010/gost_3.0.0-nightly.20241010_linux_amd64.tar.gz
+    tar xvzf gost_3.0.0-nightly.20241010_linux_amd64.tar.gz
+    mv gost /usr/local/bin/gost
+    cp gost-eu.service /etc/systemd/system/gost.service
     systemctl daemon-reload
+
     systemctl enable udp2raw
+    systemctl enable gost
     systemctl start udp2raw
+    systemctl start gost
     sleep 2s
     netstat -tulnp
 
