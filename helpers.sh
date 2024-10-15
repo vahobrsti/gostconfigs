@@ -15,15 +15,33 @@ cp config/somimobile.com/fullchain.cer /usr/local/share/ca-certificates/ca.crt
 update-ca-certificates
 
 # gost installation
+wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz    tar xvzf wstunnel_9.2.3_linux_amd64.tar.gz
+tar xvzf udp2raw_binaries.tar.gz
+cp udp2raw_x86 /usr/local/bin/udp2raw
+
+wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/udp2raw-client.service
+cp udp2raw-client.service /etc/systemd/system/udp2raw.service
+# gost installation
 wget https://github.com/go-gost/gost/releases/download/v3.0.0-rc8/gost_3.0.0-rc8_linux_amd64.tar.gz
 tar xvzf gost_3.0.0-rc8_linux_amd64.tar.gz
 mv gost /usr/local/bin/gost
+wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/gost-ir.service
+
+cp gost-ir.service /etc/systemd/system/gost.service
+systemctl daemon-reload
+
+systemctl enable udp2raw
+systemctl enable gost
+systemctl start udp2raw
+systemctl start gost
 
 # dnscrypt configurations
 wget https://github.com/DNSCrypt/dnscrypt-proxy/releases/download/2.1.4/dnscrypt-proxy-linux_x86_64-2.1.4.tar.gz
 tar xvzf dnscrypt-proxy-linux_x86_64-2.1.4.tar.gz
 mv linux-x86_64 /opt/dnscrypt-proxy
-cp gostconfigs/dnscrypt-proxy.toml /opt/dnscrypt-proxy
+wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/dnscrypt-proxy.toml
+mv dnscrypt-proxy.toml /opt/dnscrypt-proxy/dnscrypt-proxy.toml
+nano /opt/dnscrypt-proxy/dnscrypt-proxy.toml
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 apt-get remove resolvconf
@@ -40,10 +58,12 @@ echo "options edns0" >> /etc/resolv.conf
 
 #haproxy
 apt install --no-install-recommends software-properties-common -y
-add-apt-repository ppa:vbernat/haproxy-2.9 -y
+add-apt-repository ppa:vbernat/haproxy-3.0
 apt update
-apt install haproxy=2.9.\* -y
-cp ./gostconfigs/haproxy.cfg /etc/haproxy/haproxy.cfg
+apt-get install haproxy=3.0.\*
+wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/haproxy.cfg
+
+cp haproxy.cfg /etc/haproxy/haproxy.cfg
 systemctl restart haproxy
 systemctl status haproxy
 
