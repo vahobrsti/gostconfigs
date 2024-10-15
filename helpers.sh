@@ -8,14 +8,14 @@ nano /etc/netplan/99-frantech-ipv6.yaml
 netplan apply
 
 #ntopng installation
-docker run -itd -p 3000:3000  --net=host  public.ecr.aws/y2f4h6b6/ntop:latest -i eth0 --community
+docker run -itd -p 3000:3000  --net=host  public.ecr.aws/y2f4h6b6/ntop:latest -i ens160 --community
 
 #ca uptate
 cp config/somimobile.com/fullchain.cer /usr/local/share/ca-certificates/ca.crt
 update-ca-certificates
 
-# gost installation
-wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz    tar xvzf wstunnel_9.2.3_linux_amd64.tar.gz
+# udp2arw installation
+wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
 tar xvzf udp2raw_binaries.tar.gz
 cp udp2raw_x86 /usr/local/bin/udp2raw
 
