@@ -14,6 +14,8 @@ docker run -itd -p 3000:3000  --net=host  public.ecr.aws/y2f4h6b6/ntop:latest -i
 cp config/somimobile.com/fullchain.cer /usr/local/share/ca-certificates/ca.crt
 update-ca-certificates
 
+#!/bin/bash
+set -ex
 # udp2arw installation
 wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz
 tar xvzf udp2raw_binaries.tar.gz
@@ -42,6 +44,12 @@ mv linux-x86_64 /opt/dnscrypt-proxy
 wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/dnscrypt-proxy.toml
 mv dnscrypt-proxy.toml /opt/dnscrypt-proxy/dnscrypt-proxy.toml
 nano /opt/dnscrypt-proxy/dnscrypt-proxy.toml
+
+[static]
+
+   [static.ccdns]
+     stamp = 'sdns://AgcAAAAAAAAADTEzOS45OS4yMzYuNDIAEnN5ZC5zb21pbW9iaWxlLmNvbQovZG5zLXF1ZXJ5'
+
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 apt-get remove resolvconf
@@ -53,7 +61,11 @@ echo "options edns0" >> /etc/resolv.conf
 
 /opt/dnscrypt-proxy/dnscrypt-proxy -service install
 /opt/dnscrypt-proxy/dnscrypt-proxy -service start
+wget https://raw.githubusercontent.com/vahobrsti/gostconfigs/refs/heads/main/haproxy.cfg
 
+cp haproxy.cfg /etc/haproxy/haproxy.cfg
+systemctl restart haproxy
+systemctl status haproxy
 
 
 #haproxy
