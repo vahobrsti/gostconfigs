@@ -126,7 +126,7 @@ server_installation() {
 
     # Perform x-ui installation
     # Download and execute the installation script
-    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
+    VERSION=1.8.0 && bash <(curl -Ls "https://raw.githubusercontent.com/alireza0/x-ui/$VERSION/install.sh") $VERSION
     # Move the somimobile.com certs
     if [ ! -d /etc/somimobile.com ]; then
       mv somimobile.com /etc/
@@ -218,7 +218,7 @@ server_installation() {
       libprotobuf-c-dev libtalloc-dev libhttp-parser-dev protobuf-c-compiler \
       gperf nuttcp lcov libuid-wrapper libpam-wrapper libnss-wrapper \
       libsocket-wrapper gss-ntlmssp iputils-ping ipcalc \
-      gawk gnutls-bin iproute2 yajl-tools tcpdump freeradius ocserv jq
+      gawk gnutls-bin iproute2 yajl-tools tcpdump freeradius ocserv
 
     # Build and install ocserv
     autoreconf -fvi
