@@ -479,7 +479,8 @@ if [ -d "gostconfigs" ]; then
 else
   # Clone the repository
     if ! command -v git &>/dev/null; then
-      sudo apt update -y
+      apt update -y
+      apt install sudo -y
       sudo apt install git -y
       sudo apt install iptables -y
     fi
