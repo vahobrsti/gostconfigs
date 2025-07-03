@@ -55,7 +55,20 @@ create_backup() {
   cp -r /etc/somimobile.com "$SOURCE/"
   cp -r /home/ubuntu/certs "$SOURCE/"
   cp -r /opt/outline/persisted-state "$SOURCE/"
+  cp -r /etc/openvpn "$SOURCE/"
+  # Conditionally copy extra files if they exist
+  EXTRA_FILES=(
+    "/etc/systemd/system/frp.service"
+    "/etc/systemd/system/frpir.service"
+    "/etc/frpc/frpc-ir.toml"
+    "/etc/frpc/frpc.toml"
+  )
 
+  for FILE in "${EXTRA_FILES[@]}"; do
+    if [ -f "$FILE" ]; then
+      cp "$FILE" "$SOURCE/"
+    fi
+  done
   # Check if config.zip exists, if yes, delete it
   if [ -f "$DESTINATION" ]; then
       rm "$DESTINATION"
