@@ -357,11 +357,9 @@ server_installation() {
 		cp -a ./openvpn/. /etc/openvpn/
 		iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE
 		systemctl daemon-reload
-		sleep 3s
 		systemctl restart openvpn
-		systemctl start openvpn-server@server
-		sleep 2s
-		systemctl enable openvpn-server@server
+		systemctl start openvpn@server
+		systemctl enable openvpn@server
 
     ;;
   *)
