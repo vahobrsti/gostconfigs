@@ -363,11 +363,10 @@ server_installation() {
 		systemctl start openvpn@server
 		systemctl enable openvpn@server
 		cd ./../gostconfigs || exit
-
     ;;
   6)
-    echo "Performing openvpn installation..."
-
+    echo "acme installation"
+    ;;
   *)
     echo "Invalid choice. Exiting."
     exit 1
