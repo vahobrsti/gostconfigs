@@ -56,6 +56,7 @@ create_backup() {
   cp -r /home/ubuntu/certs "$SOURCE/"
   cp -r /opt/outline/persisted-state "$SOURCE/"
   cp -r /etc/openvpn "$SOURCE/"
+  cp -r ~/.acme.sh "$SOURCE/"
   # Conditionally copy extra files if they exist
   EXTRA_FILES=(
     "/etc/systemd/system/frp.service"
@@ -127,8 +128,9 @@ server_installation() {
   echo "3. ocserv installation"
   echo "4. Outline installation"
   echo "5. OpenVPN installation"
+  echo "6. Install acme"
 
-  read -p "Enter your choice (1-5): " choice
+  read -p "Enter your choice (1-6): " choice
 
   # Perform action based on user's choice
   case $choice in
@@ -360,8 +362,12 @@ server_installation() {
 		systemctl restart openvpn
 		systemctl start openvpn@server
 		systemctl enable openvpn@server
+		cd ./../gostconfigs || exit
 
     ;;
+  6)
+    echo "Performing openvpn installation..."
+
   *)
     echo "Invalid choice. Exiting."
     exit 1
