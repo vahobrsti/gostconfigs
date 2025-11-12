@@ -366,6 +366,14 @@ server_installation() {
     ;;
   6)
     echo "acme installation"
+    cd config || exit
+    apt install cron -y
+    systemctl enable --now cron
+    mv .acme.sh ~
+    ~/.acme.sh/acme.sh --install-cronjob
+    echo 'PATH=$PATH:/root/.acme.sh/' >> ~/.bashrc
+    source  ~/.bashrc
+    acme.sh --list
     ;;
   *)
     echo "Invalid choice. Exiting."
