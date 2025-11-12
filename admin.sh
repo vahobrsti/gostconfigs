@@ -126,7 +126,7 @@ server_installation() {
   echo "2. AdGuard Home installation"
   echo "3. ocserv installation"
   echo "4. Outline installation"
-  echo "5. Firewall configuration"
+  echo "5. OpenVPN installation"
 
   read -p "Enter your choice (1-5): " choice
 
@@ -347,8 +347,19 @@ server_installation() {
 
     ;;
   5)
-    echo "Performing firewall configuration..."
-    # Add firewall configuration command here
+    echo "Performing openvpn installation..."
+    cd config || exit
+    apt-get install -y openvpn iptables openssl wget ca-certificates curl
+    NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
+    if [[ -d /etc/openvpn/easy-rsa/ ]]; then
+			rm -rf /etc/openvpn/easy-rsa/
+		fi
+		cp -a ./openvpn/. /etc/openvpn/
+		iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE
+		systemctl daemon-reload
+		systemctl restart openvpn-server@server
+		systemctl enable openvpn-server@server
+
     ;;
   *)
     echo "Invalid choice. Exiting."
