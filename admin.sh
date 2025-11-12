@@ -374,6 +374,8 @@ server_installation() {
     echo 'PATH=$PATH:/root/.acme.sh/' >> ~/.bashrc
     source  ~/.bashrc
     acme.sh --list
+    cd ./../gostconfigs || exit
+
     ;;
   *)
     echo "Invalid choice. Exiting."
