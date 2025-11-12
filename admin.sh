@@ -361,11 +361,9 @@ server_installation() {
     systemctl daemon-reload
 
     systemctl enable udp2raw
-    systemctl enable gost
     systemctl start udp2raw
-    systemctl start gost
     sleep 2s
-    netstat -tulnp
+    netstat -tlnp
 
     ;;
   6)
