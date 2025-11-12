@@ -57,6 +57,7 @@ create_backup() {
   cp -r /opt/outline/persisted-state "$SOURCE/"
   cp -r /etc/openvpn "$SOURCE/"
   cp -r ~/.acme.sh "$SOURCE/"
+  cp -r ~/.aws "$SOURCE/"
   # Conditionally copy extra files if they exist
   EXTRA_FILES=(
     "/etc/systemd/system/frp.service"
