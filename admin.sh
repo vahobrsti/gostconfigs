@@ -124,7 +124,7 @@ server_installation() {
 
   # Prompt user for action selection
   echo "Select an action to perform:"
-  echo "1. Install acme"
+  echo "1. Install acme and aws cli"
   echo "2. x-ui installation"
   echo "3. AdGuard Home installation"
   echo "4. OpenConnect installation"
@@ -137,7 +137,7 @@ server_installation() {
   # Perform action based on user's choice
   case $choice in
   1)
-    echo "acme installation"
+    echo "acme and aws installation"
     cd config || exit
     apt install cron -y
     systemctl enable --now cron
@@ -146,6 +146,11 @@ server_installation() {
     echo 'PATH=$PATH:/root/.acme.sh/' >> ~/.bashrc
     source  ~/.bashrc
     acme.sh --list
+    mv -f .aws ~/
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    aws sts get-caller-identity
     cd ./../gostconfigs || exit
 
     ;;
