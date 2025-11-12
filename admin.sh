@@ -123,25 +123,39 @@ server_installation() {
 
   # Prompt user for action selection
   echo "Select an action to perform:"
-  echo "1. x-ui installation"
-  echo "2. AdGuard Home installation"
-  echo "3. ocserv installation"
-  echo "4. Outline installation"
-  echo "5. OpenVPN installation"
-  echo "6. Install acme"
+  echo "1. Install acme"
+  echo "2. x-ui installation"
+  echo "3. AdGuard Home installation"
+  echo "4. OpenConnect installation"
+  echo "5. Outline installation"
+  echo "6. OpenVPN installation"
+
 
   read -p "Enter your choice (1-6): " choice
 
   # Perform action based on user's choice
   case $choice in
   1)
+    echo "acme installation"
+    cd config || exit
+    apt install cron -y
+    systemctl enable --now cron
+    mv .acme.sh ~
+    ~/.acme.sh/acme.sh --install-cronjob
+    echo 'PATH=$PATH:/root/.acme.sh/' >> ~/.bashrc
+    source  ~/.bashrc
+    acme.sh --list
+    cd ./../gostconfigs || exit
+
+    ;;
+  2)
     echo "Performing x-ui installation..."
     # Move into the extracted config directory
     cd config || exit
 
     # Perform x-ui installation
     # Download and execute the installation script
-    VERSION=1.8.0 && bash <(curl -Ls "https://raw.githubusercontent.com/alireza0/x-ui/$VERSION/install.sh") $VERSION
+    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
     # Move the somimobile.com certs
     if [ ! -d /etc/somimobile.com ]; then
       mv somimobile.com /etc/
@@ -167,7 +181,7 @@ server_installation() {
 
     echo "x-ui installation completed."
     ;;
-  2)
+  3)
     echo "Performing AdGuard Home installation..."
     # Move into the extracted config directory
     cd config || exit
@@ -220,7 +234,7 @@ server_installation() {
     /opt/AdGuardHome/AdGuardHome -s start
     echo "AdGuard Home installation completed."
     ;;
-  3)
+  4)
     echo "Performing ocserv installation..."
 
     # Clone the ocserv repository
@@ -303,7 +317,7 @@ server_installation() {
     systemctl status ocserv
     echo "ocserv installation completed."
     ;;
-  4)
+  5)
     echo "Performing Outline installation..."
     # Move into the extracted config directory
     cd config || exit
@@ -348,7 +362,7 @@ server_installation() {
     netstat -tulnp
 
     ;;
-  5)
+  6)
     echo "Performing openvpn installation..."
     cd config || exit
     apt-get install -y openvpn iptables openssl wget ca-certificates curl
@@ -364,19 +378,7 @@ server_installation() {
 		systemctl enable openvpn@server
 		cd ./../gostconfigs || exit
     ;;
-  6)
-    echo "acme installation"
-    cd config || exit
-    apt install cron -y
-    systemctl enable --now cron
-    mv .acme.sh ~
-    ~/.acme.sh/acme.sh --install-cronjob
-    echo 'PATH=$PATH:/root/.acme.sh/' >> ~/.bashrc
-    source  ~/.bashrc
-    acme.sh --list
-    cd ./../gostconfigs || exit
 
-    ;;
   *)
     echo "Invalid choice. Exiting."
     exit 1
